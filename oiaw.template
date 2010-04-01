@@ -1,0 +1,10 @@
+class-separator: == .* ==
+
+subclass-header: ||\\s*''Classname\\s*||\\s*ID\\s*||\\s*Subclass of''\\s*||
+subclass-template: ||\\s*{classname}\\s*||\\s*{class-id}\\s*||\\s*{subclass-of}\\s*||
+
+properties-header: ||\\s*''Property name\\s*||\\s*Short description\\s*||\\s*ID\\s*||\\s*Alternate ID\\s*||\\s*Typical value domains''\\s*||
+properties-template: ||\\s*{property-name}\\s*||\\s*{property-description}\\s*||\\s*{property-id}\\s*||\\s*{alternate-id}\\s*||\\s*{value-domain}\\s*||
+
+relationships-header: ||\\s*''Name\\s*||\\s*Short description\\s*||\\s*Type-ID\\s*||\\s*Player type 1\\s*||\\s*Role type 1\\s*||\\s*Player type 2\\s*||\\s*Role type 2''\\s*||
+relationships-template: ||\\s*{relationship-name}\\s*||\\s*{relationship-description}\\s*||\\s*{relationship-id}\\s*||\\s*{player-type1}\\s*||\\s*{role-type1}\\s*||\\s*{player-type2}\\s*||\\s*{role-type2}\\s*||
