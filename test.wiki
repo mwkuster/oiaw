@@ -4,8 +4,8 @@
 ||Resource || resource || ||
 
 ||''Property name  || Short description || ID || Alternate ID || Typical value domains ''||
-||URI / IRI || Address for electronic access to the resource (e.g. via Web, Email etc.)|| link ||  || {{{xsd:anyURI}}} ||
-||Name ||Title(s)/name(s) of the resource, possibly scoped by language || name ||  || ||
+||URI / IRI || Address for electronic access to the resource (e.g. via Web, Email etc.)|| link || - || {{{xsd:anyURI}}} ||
+||Name ||Title(s)/name(s) of the resource, possibly scoped by language || name ||   ||  ||
 ||Description ||Free text description(s) of the resource (scoped by language if necessary) || description ||http://purl.org/dc/elements/1.1/description || ||
 ||Language ||Language of the resource || language || http://purl.org/dc/terms/language  || language code (RFC 3066)||
 ||Status ||Categorization of the status according to a suitable taxonomy || status ||  || values such as ''valid'', ''withdrawn'', ''operational''||
@@ -71,7 +71,7 @@ A Standard is for the purposes of the ontology a formal or informal specificatio
 
 Properties (in addition to the generic ones):
 ||''Property name  || Short description || ID || Alternate ID || Typical value domains ''||
-||Formal identification ||Formal identification of a standard || formal-identification ||  ||  ||
+||Formal identification ||Formal identification of a standard || formal-identification || - || - ||
 ||Version ||Version of the standard || version || || ||
 
 

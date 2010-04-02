@@ -1,10 +1,11 @@
 class-separator: == .* ==
 
-subclass-header: ||\\s*''Classname\\s*||\\s*ID\\s*||\\s*Subclass of''\\s*||
-subclass-template: ||\\s*{classname}\\s*||\\s*{class-id}\\s*||\\s*{subclass-of}\\s*||
+class-header: \\|\\|\\s*''Classname\\s*\\|\\|\\s*ID\\s*\\|\\|\\s*Subclass of''\\s*\\|\\|
+class-template: \\|\\|{classname}\\|\\|{class-id}\\|\\|{subclass-of}\\|\\|
 
-properties-header: ||\\s*''Property name\\s*||\\s*Short description\\s*||\\s*ID\\s*||\\s*Alternate ID\\s*||\\s*Typical value domains''\\s*||
-properties-template: ||\\s*{property-name}\\s*||\\s*{property-description}\\s*||\\s*{property-id}\\s*||\\s*{alternate-id}\\s*||\\s*{value-domain}\\s*||
+properties-header: \\|\\|\\s*''Property name\\s*\\|\\|\\s*Short description\\s*\\|\\|\\s*ID\\s*\\|\\|\\s*Alternate ID\\s*\\|\\|\\s*Typical value domains\\s*''\\s*\\|\\|
+properties-template: \\|\\|{property-name}\\|\\|{property-description}\\|\\|{property-id}\\|\\|{alternate-id}\\|\\|{value-domain}\\|\\|
+properties-end: \\n\\n
 
-relationships-header: ||\\s*''Name\\s*||\\s*Short description\\s*||\\s*Type-ID\\s*||\\s*Player type 1\\s*||\\s*Role type 1\\s*||\\s*Player type 2\\s*||\\s*Role type 2''\\s*||
-relationships-template: ||\\s*{relationship-name}\\s*||\\s*{relationship-description}\\s*||\\s*{relationship-id}\\s*||\\s*{player-type1}\\s*||\\s*{role-type1}\\s*||\\s*{player-type2}\\s*||\\s*{role-type2}\\s*||
+relationships-header: \\|\\|\\s*''Name\\s*\\|\\|\\s*Short description\\s*\\|\\|\\s*Type-ID\\s*\\|\\|\\s*Player type 1\\s*\\|\\|\\s*Role type 1\\s*\\|\\|\\s*Player type 2\\s*\\|\\|\\s*Role type 2''\\s*\\|\\|
+relationships-template: \\|\\|{relationship_name}\\|\\|{relationship_description}\\|\\|{relationship-id}\\|\\|{player-type1}\\|\\|{role-type1}\\|\\|{player-type2}\\|\\|{role-type2}\\|\\|
