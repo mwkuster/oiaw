@@ -4,6 +4,8 @@ import scala.util.parsing.combinator.syntactical._
 import scala.util.parsing.combinator._
 import scala.util.matching.Regex
 
+import scala.io._
+
 //Implementation strategy:
 //Parse template file to create regular expressions (open as Java properties file?)
 
@@ -11,18 +13,7 @@ import scala.util.matching.Regex
 //Split input files into separate parts corresponding to individual class declarations
 //Use Regular Expressions extractors to extract the variables
 
-case class Property(val property_name : String, 
-		    val property_description : String, 
-		    val property_id : String, 
-		    val alternate_id : String, 
-		    val value_domain : String) {}
-
-case class Topic (val classname : String, 
-		  val class_id : String, 
-		  val subclass_id : String,
-		  val properties : List[Property]) {}
-
-class WikiParser(val wikipage : String, val template_name : String) {
+class WikiParser(val wikipage : Source, val template_name : String) {
   //A subsection contains a single class declaration
   //A class definition consists of three parts
   // * a subclass declaration
@@ -39,6 +30,10 @@ class WikiParser(val wikipage : String, val template_name : String) {
   val properties_regexp = build_regexp("properties-template")
   val end_properties_regexp = build_regexp("properties-end")
 
+
+  val start_relationships_regexp = build_regexp("relationships-header")
+  val relationships_regexp = build_regexp("relationships-template")
+  val end_relationships_regexp = build_regexp("relationships-end")
   /**
    * Extracts the list of properties from the class definition and return it
    *
@@ -46,7 +41,7 @@ class WikiParser(val wikipage : String, val template_name : String) {
    * text fragment, marked on the one side by the properties-header (e.g. a table header) and
    * on the other side by an end marker (e.g. end of table or new lines)
    */
-  def parse_properties(s : String) : List[Property] = {
+  def parse_properties(range_class_id : String, s : String) : List[Property] = {
     val properties_start = start_properties_regexp.findFirstMatchIn(s)
     if(properties_start.isDefined) {
       val end = end_properties_regexp findFirstMatchIn(s.substring(properties_start.get.end))
@@ -56,11 +51,38 @@ class WikiParser(val wikipage : String, val template_name : String) {
       match_it.matchData.map {
 	hit => {
 	  new Property(hit.group("property-name").trim, hit.group("property-description").trim, hit.group("property-id").trim,
-		       hit.group("alternate-id").trim, hit.group("value-domain").trim)
+		       hit.group("alternate-id").trim, range_class_id, hit.group("value-domain").trim)
 	}
       }.toList
     } else {
-      List()
+      Nil
+    }
+  }
+
+  /**
+   * Extracts the list of relationships from the class definition and return it
+   *
+   * The algorithm works on the assumption that the properties follow each other in a given
+   * text fragment, marked on the one side by the properties-header (e.g. a table header) and
+   * on the other side by an end marker (e.g. end of table or new lines)
+   */
+  def parse_relationships(range_class_id : String, s : String) : List[Relationship] = {
+    val rel_start = start_relationships_regexp.findFirstMatchIn(s)
+    if(rel_start.isDefined) {
+      val end = end_relationships_regexp findFirstMatchIn(s.substring(rel_start.get.end))
+      val end_of_hit = if(end.isDefined) rel_start.get.end + end.get.start else s.length
+      val part = s.substring(rel_start.get.end, if(end_of_hit < s.length) end_of_hit else s.length)
+      val match_it = relationships_regexp.findAllIn(part)
+      match_it.matchData.map {
+	hit => {
+	  new Relationship(hit.group("relationship-name").trim, hit.group("relationship-description").trim, hit.group("relationship-id").trim,
+			   range_class_id,
+			   hit.group("player-type1").trim, hit.group("role-type1").trim,
+			   hit.group("player-type2").trim, hit.group("role-type2").trim)
+	}
+      }.toList
+    } else {
+      Nil
     }
   }
 
@@ -76,9 +98,10 @@ class WikiParser(val wikipage : String, val template_name : String) {
       val class_def_part = s.substring(class_start.get.end)
       val class_match = class_regexp.findFirstMatchIn(class_def_part) //we know that there's only one
       if(class_match.isDefined) {
-	val properties = parse_properties(s)
+	val properties = parse_properties(class_match.get.group("class-id").trim, s)
+	val relationships = parse_relationships(class_match.get.group("class-id").trim, s)
 	Some(new Topic(class_match.get.group("classname").trim, class_match.get.group("class-id").trim, class_match.get.group("subclass-of").trim,
-		properties))
+		properties, relationships))
       } else {
 	None
       }
@@ -102,8 +125,8 @@ class WikiParser(val wikipage : String, val template_name : String) {
     template
   }
   
-  def split_classes(filename : String) : List[String] = {
-    val src_lines = scala.io.Source.fromFile(filename, "UTF-8").getLines //or fromURL(...).toString
+  def split_classes(src : Source) : List[String] = {
+    val src_lines = src.getLines //or fromURL(...).toString
 
     src_lines.foldLeft("")( _ + _ ).split(template.getProperty("class-separator")).filter(_ != "").toList
   }

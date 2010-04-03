@@ -1,0 +1,3 @@
+#/usr/bin/bash
+export SCALA_HOME=/opt/local/share/scala-2.7
+java -cp $SCALA_HOME/lib/scala-library.jar:lib/commons-cli-1.2.jar:lib/scalatest-1.0.jar:oiaw.jar eu.budabe.oiaw.OIAWrun $*

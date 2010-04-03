@@ -7,5 +7,6 @@ properties-header: \\|\\|\\s*''Property name\\s*\\|\\|\\s*Short description\\s*\
 properties-template: \\|\\|{property-name}\\|\\|{property-description}\\|\\|{property-id}\\|\\|{alternate-id}\\|\\|{value-domain}\\|\\|
 properties-end: \\n\\n
 
-relationships-header: \\|\\|\\s*''Name\\s*\\|\\|\\s*Short description\\s*\\|\\|\\s*Type-ID\\s*\\|\\|\\s*Player type 1\\s*\\|\\|\\s*Role type 1\\s*\\|\\|\\s*Player type 2\\s*\\|\\|\\s*Role type 2''\\s*\\|\\|
-relationships-template: \\|\\|{relationship_name}\\|\\|{relationship_description}\\|\\|{relationship-id}\\|\\|{player-type1}\\|\\|{role-type1}\\|\\|{player-type2}\\|\\|{role-type2}\\|\\|
+relationships-header: \\|\\|\\s*''Name\\s*\\|\\|\\s*Short description\\s*\\|\\|\\s*Type-ID\\s*\\|\\|\\s*Player type 1\\s*\\|\\|\\s*Role type 1\\s*\\|\\|\\s*Player type 2\\s*\\|\\|\\s*Role type 2\\s*''\\s*\\|\\|
+relationships-template: \\|\\|{relationship-name}\\|\\|{relationship-description}\\|\\|{relationship-id}\\|\\|{player-type1}\\|\\|{role-type1}\\|\\|{player-type2}\\|\\|{role-type2}\\|\\|
+relationships-end: \\n\\n

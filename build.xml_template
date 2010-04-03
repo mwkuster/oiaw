@@ -44,9 +44,9 @@
       <delete file="MANIFEST.MF"/>
 
       <manifest file="MANIFEST.MF">
-        <attribute name="Main-Class" value="oiaw"/>
+        <attribute name="Main-Class" value="eu.budabe.oiaw.OIAW"/>
       </manifest>
-
+      
       <jar jarfile="oiaw.jar" basedir="${build.dir}" manifest="MANIFEST.MF"/>
     </target>
 </project>
