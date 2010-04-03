@@ -45,7 +45,7 @@ class WikiParser(val wikipage : Source, val template_name : String) {
     val properties_start = start_properties_regexp.findFirstMatchIn(s)
     if(properties_start.isDefined) {
       val end = end_properties_regexp findFirstMatchIn(s.substring(properties_start.get.end))
-      val end_of_hit = properties_start.get.end + end.get.start
+      val end_of_hit = if(end.isDefined) properties_start.get.end + end.get.start else s.length
       val part = s.substring(properties_start.get.end, if(end_of_hit < s.length) end_of_hit else s.length)
       val match_it = properties_regexp.findAllIn(part)
       match_it.matchData.map {

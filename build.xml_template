@@ -34,7 +34,7 @@
   </target>
 
   <target name="test" depends="build">
-    <scalatest suite="eu.budabe.oiaw.tests.WikiParserSpec" runpath="${build.dir}">
+    <scalatest suite="eu.budabe.oiaw.tests.OIAWSpec" runpath="${build.dir}">
       <reporter type="stdout"/>
     </scalatest>
   </target>

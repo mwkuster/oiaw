@@ -9,7 +9,7 @@ import scala.xml.dtd._
 
 import eu.budabe.oiaw._
 
-class WikiParserSpec extends WordSpec with ShouldMatchers  {
+class OIAWSpec extends WordSpec with ShouldMatchers  {
   val w = new WikiParser(scala.io.Source.fromFile("test.wiki"), "oiaw.template")
   val tops = w.get_topics()
 
