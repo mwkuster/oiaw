@@ -62,10 +62,10 @@ object OIAWrun {
       val w = new WikiParser(src, cmd.getOptionValue("t"))
 
       val oiaw = new OIAW(w.get_topics, cmd.getOptionValue('b'))
-      if(cmd.getOptionValue('f') == "OWL") {
-	oiaw.saveOWL(cmd.getOptionValue('o'))
-      } else {
-	println("Option " + cmd.getOptionValue('f') + " not implemented")
+      cmd.getOptionValue('f') match {
+	case "OWL" => oiaw.saveOWL(cmd.getOptionValue('o'))
+	case "TM" => oiaw.saveXTM(cmd.getOptionValue('o'))
+	case _ => println("Option " + cmd.getOptionValue('f') + " not implemented")
       }
       
     }
