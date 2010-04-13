@@ -33,7 +33,7 @@ object OIAWrun {
     options.addOption(template_option)
     
     val help_option = new Option("h", "help", false, "Help message")
-    template_option.setRequired(false)
+    help_option.setRequired(false)
     options.addOption(help_option)
     
     val source_options = new OptionGroup()
@@ -71,6 +71,8 @@ object OIAWrun {
       }
     } catch {
       case moe : org.apache.commons.cli.MissingOptionException => {
+	println("Missing option")
+	println(moe)
 	usage()
       }
       case _ => usage()
