@@ -5,16 +5,16 @@
   <property name="scala.home" value="/opt/local/share/scala-2.7/lib/"/>
 
   <path id="app.classpath">
-    <pathelement location="${scala.home}/scala-compiler.jar"/>
-    <pathelement location="${scala.home}/scala-library.jar"/>
+    <pathelement location="${src.dir}/lib/scala-compiler.jar"/>
+    <pathelement location="${src.dir}/lib/scala-library.jar"/>
     <pathelement location="${src.dir}/lib/commons-cli-1.2.jar"/>
     <pathelement location="${src.dir}/lib/scalatest-1.0.jar"/>
   </path>
 
    <taskdef resource="scala/tools/ant/antlib.xml">
     <classpath>
-      <pathelement location="${scala.home}/scala-compiler.jar"/>
-      <pathelement location="${scala.home}/scala-library.jar"/>
+      <pathelement location="${src.dir}/lib/scala-compiler.jar"/>
+      <pathelement location="${src.dir}/lib/scala-library.jar"/>
     </classpath>
   </taskdef> 
 
@@ -46,7 +46,7 @@
       <manifest file="MANIFEST.MF">
         <attribute name="Main-Class" value="eu.budabe.oiaw.OIAW"/>
       </manifest>
-      
+
       <jar jarfile="oiaw.jar" basedir="${build.dir}" manifest="MANIFEST.MF"/>
     </target>
 </project>
