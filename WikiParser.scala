@@ -140,35 +140,14 @@ class WikiParser(val wikipage : Source, val template_name : String) {
    * (or None, if no class definition could be found in the text fragment)
    */
   def parse_class(lines : List[String]) : Option[Topic] = {
-    //Find subclass header in the class string and extract information
-    //on the class in question
-    def pc (line : String, lines : List[String]) : Option[Topic] = {
-      lines match {
-        case x :: xs if start_class_regexp.findFirstMatchIn(line).isDefined => {
-          //val s = lines.foldLeft("")(_ + _)
+    val tp = new TopicParser(start_class_regexp, class_regexp, rp, pp)
+    
+    val tops : List[Topic] = tp.parse_topic(lines)
 
-          //val class_match = class_regexp.findFirstMatchIn(s) //we know that there's only one
-	  //println(class_match)
-          //if(class_match.isDefined) {
-
-	  //The match must be in the line following the start_class_regexp
-	  val class_match = class_regexp.findFirstMatchIn(x)
-	  if(class_match.isDefined) {
-	    val properties = pp.parse_properties(class_match.get.group("class-id").trim, xs)
-	    val relationships = rp.parse_relationships(class_match.get.group("class-id").trim, xs)
-	    Some(new Topic(class_match.get.group("classname").trim, 
-                           class_match.get.group("class-id").trim, 
-                           class_match.get.group("subclass-of").trim,
-		           properties, relationships))
-          } else {
-	          None
-          }
-        }
-        case x :: xs => pc(x, xs)
-        case _ => None
-      }
+    tops match {
+      case top :: ts => Some(top)
+      case Nil => None
     }
-    pc("", lines)
   }
 
   def get_topics() : List[Topic] = {
