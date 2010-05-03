@@ -34,7 +34,13 @@ trait LineParser {
                    
   }
 
-  //def build_regexp(property : String) : Regex
+  def get_group(hit : Regex.Match, groupname : String) : String = {
+    try {
+      hit.group(groupname).trim
+    } catch {
+      case nsee : NoSuchElementException => ""
+    }
+  }
 }
 
 class PropertyParser(val start_properties_regexp : Regex,
@@ -43,7 +49,7 @@ class PropertyParser(val start_properties_regexp : Regex,
 
 
   /**
-   * Extracts the list of properties from the class definition and return it
+   * Extracts the list of properties from the class definition and returns it
    *
    * The algorithm works on the assumption that the properties follow each other in a given
    * text fragment, marked on the one side by the properties-header (e.g. a table header) and
@@ -51,11 +57,11 @@ class PropertyParser(val start_properties_regexp : Regex,
    */
   def parse_properties(range_class_id : String, lines : List[String]) : List[Property] = {
     parse_lines("", lines, start_properties_regexp, properties_regexp, 
-                {hit => new Property(hit.group("property-name").trim, 
-                                     hit.group("property-description").trim, 
-                                     hit.group("property-id").trim,
-		                                 hit.group("alternate-id").trim, range_class_id, 
-                                     hit.group("value-domain").trim)})
+                {hit => new Property(get_group(hit, "property-name"), 
+                                     get_group(hit, "property-description"), 
+                                     get_group(hit, "property-id"),
+		                     get_group(hit, "alternate-id"), range_class_id, 
+                                     get_group(hit, "value-domain"))})
   }
 }
 
@@ -65,7 +71,7 @@ class RelationshipParser(val start_relationships_regexp : Regex,
 
 
   /**
-   * Extracts the list of relationships from the class definition and return it
+   * Extracts the list of relationships from the class definition and returns it
    *
    * The algorithm works on the assumption that the properties follow each other in a given
    * text fragment, marked on the one side by the properties-header (e.g. a table header) and
@@ -73,17 +79,34 @@ class RelationshipParser(val start_relationships_regexp : Regex,
    */
   def parse_relationships(range_class_id : String, lines : List[String]) : List[Relationship] = {
     parse_lines("", lines, start_relationships_regexp, relationships_regexp, 
-	              { hit => new Relationship(hit.group("relationship-name").trim, 
-                                          hit.group("relationship-description").trim, 
-                                          hit.group("relationship-id").trim,
-			                                    range_class_id,
-			                                    hit.group("player-type1").trim, 
-                                          hit.group("role-type1").trim,
-			                                    hit.group("player-type2").trim, 
-                                          hit.group("role-type2").trim) })
+	              { hit => new Relationship(get_group(hit, "relationship-name"), 
+						get_group(hit, "relationship-description"), 
+						get_group(hit, "relationship-id"),
+			                        range_class_id,
+			                        get_group(hit, "player-type1").trim, 
+						get_group(hit, "role-type1"),
+			                        get_group(hit, "player-type2"), 
+						get_group(hit, "role-type2"),
+						get_group(hit, "relationship-characteristics"))})
 	}
+}
 
+class TopicParser(val start_class_regexp : Regex, 
+		  val class_regexp : Regex,
+		  val rp : RelationshipParser,
+		  val pp : PropertyParser) extends LineParser {
+  type A = Topic
 
+  def parse_topic(lines : List[String]) : List[Topic] = {
+    parse_lines("", lines, start_class_regexp, class_regexp, 
+		{ hit =>
+		  val properties = pp.parse_properties(get_group(hit, "class-id"), lines)
+		 val relationships = rp.parse_relationships(get_group(hit, "class-id"), lines)
+		 new Topic(get_group(hit, "classname"), 
+                           get_group(hit, "class-id"),
+                           get_group(hit, "subclass-of"),
+		           properties, relationships)})
+  }
 }
 
 //Implementation strategy:
@@ -121,17 +144,22 @@ class WikiParser(val wikipage : Source, val template_name : String) {
     //on the class in question
     def pc (line : String, lines : List[String]) : Option[Topic] = {
       lines match {
-        case _ if start_class_regexp.findFirstMatchIn(line).isDefined => {
-          val s = lines.foldLeft("")(_ + _)
+        case x :: xs if start_class_regexp.findFirstMatchIn(line).isDefined => {
+          //val s = lines.foldLeft("")(_ + _)
 
-          val class_match = class_regexp.findFirstMatchIn(s) //we know that there's only one
-          if(class_match.isDefined) {
-	          val properties = pp.parse_properties(class_match.get.group("class-id").trim, lines)
-	          val relationships = rp.parse_relationships(class_match.get.group("class-id").trim, lines)
-	          Some(new Topic(class_match.get.group("classname").trim, 
+          //val class_match = class_regexp.findFirstMatchIn(s) //we know that there's only one
+	  //println(class_match)
+          //if(class_match.isDefined) {
+
+	  //The match must be in the line following the start_class_regexp
+	  val class_match = class_regexp.findFirstMatchIn(x)
+	  if(class_match.isDefined) {
+	    val properties = pp.parse_properties(class_match.get.group("class-id").trim, xs)
+	    val relationships = rp.parse_relationships(class_match.get.group("class-id").trim, xs)
+	    Some(new Topic(class_match.get.group("classname").trim, 
                            class_match.get.group("class-id").trim, 
                            class_match.get.group("subclass-of").trim,
-		                       properties, relationships))
+		           properties, relationships))
           } else {
 	          None
           }
@@ -160,14 +188,14 @@ class WikiParser(val wikipage : Source, val template_name : String) {
   
   def split_classes(src : Source) : List[List[String]] = {
     val src_lines = src.getLines.toList
-    val re = new Regex(template.getProperty("class-separator"))
+    val re = new Regex(template.getProperty("class-separator") + """\s*$""")
     Utility.splitBefore(src_lines, {line => re.findFirstMatchIn(line).isDefined})
   }
   
   def build_regexp(property : String) : Regex = {
     val brute_regexp : String = template.getProperty(property)
 
-    val regexp = """\{[\w-]+?\}""".r.replaceAllIn(brute_regexp, """([^\|]+)""") + """\s*"""
+    val regexp = """\{[\w-]+?\}""".r.replaceAllIn(brute_regexp, """([^|\\n]*)""") + """\s*"""
     val fieldnames =   (for {
       hit <- """\{([\w-]+)\}""".r findAllIn(brute_regexp) matchData
      } yield hit.group(1)) toList

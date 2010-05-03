@@ -248,7 +248,7 @@ Function or activity in or of eGovernment activities. A function is described as
 Property:
 ||''Property name || Short description || ID || Alternate ID || Typical value domains ''||
 ||Term ||Term naming the function, possibly scoped by language || term || || Eurovoc codes (where possible). Necessary extensions should be documented and linked to appropriate Eurovoc subject(s) ||
-||Description ||Free-text description(s) explaining the term, possibly scoped by language || description ||  http://purl.org/dc/elements/1.1/description  || ||
+||Descriptio n ||Free-text description(s) explaining the term, possibly scoped by language || description ||  http://purl.org/dc/elements/1.1/description  || ||
 
 Relationships:
 ||''Name || Short description || Type-ID || Player type 1 || Role type 1  || Player type 2 || Role type 2 ''||

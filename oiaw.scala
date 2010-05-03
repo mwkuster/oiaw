@@ -49,6 +49,7 @@ case class Property(val property_name : String,
     xmlns:owl="http://www.w3.org/2002/07/owl#"
     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+    <rdfs:comment>{property_description}</rdfs:comment>
     <rdfs:label>{property_name}</rdfs:label>
         {
 	  if(alternate_id != "")
@@ -94,7 +95,31 @@ case class Relationship(val relationship_name : String,
 			val player_type1 : String, 
 			val role_type1 : String,
 			val player_type2 : String,
-			val role_type2 : String) extends Construct() {
+			val role_type2 : String,
+			val relationship_characteristics : String) extends Construct() {
+  val inverseOf_re = """\s*inverseOf:\s*(\w+)\s*""".r
+  val inverseOf_transitive_re = """\s*transitiveProperty;\s*inverseOf:\s*(\w+)\s*""".r
+  val transitive_re = """\s*(transitiveProperty)\s*""".r
+
+  def get_characteristics() : List[Elem] = {
+    relationship_characteristics match {
+      case inverseOf_re(inverse_of_id) => {
+	List(<owl:inverseOf 
+           rdf:resource={Construct.toUri(player_type2 + "-" + inverse_of_id + "-" + player_type1)}
+	   xmlns:owl="http://www.w3.org/2002/07/owl#"/>)
+      }
+      case inverseOf_transitive_re(inverse_of_id) => {
+	List(<owl:inverseOf 
+             rdf:resource={Construct.toUri(player_type2 + "-" + inverse_of_id + "-" + player_type1)}
+	     xmlns:owl="http://www.w3.org/2002/07/owl#"/>,
+             <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#TransitiveProperty"/>)
+      }
+      case transitive_re(tr) => {
+	List(<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#TransitiveProperty"/>)
+      }
+      case _ => Nil
+    }
+  }
   def toOWLBasic() : Elem = {
     <owl:ObjectProperty rdf:about={Construct.toUri(relationship_id)}
     xmlns:owl="http://www.w3.org/2002/07/owl#"
@@ -109,9 +134,11 @@ case class Relationship(val relationship_name : String,
     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
         <rdfs:label>{relationship_name}</rdfs:label>
+        <rdfs:comment>{relationship_description}</rdfs:comment>
         <rdfs:domain rdf:resource={Construct.toUri(player_type2)}/>
         <rdfs:range rdf:resource={Construct.toUri(player_type1)}/>
         <rdfs:subPropertyOf rdf:resource={Construct.toUri(relationship_id)}/>
+        {get_characteristics()}
     </owl:ObjectProperty>
   }
 
@@ -144,16 +171,21 @@ case class Topic (val classname : String,
 		  val subclass_id : String,
 		  val properties : List[Property],
 		  val relationships : List[Relationship]) extends Construct() {
+
+  def subclass_toOWL() : List[Elem] = {
+    if(subclass_id != "")
+      List(<rdfs:subClassOf rdf:resource={Construct.toUri(subclass_id)}/>)
+    else
+      Nil
+  }
+
   def toOWL() = {
     <owl:Class rdf:about={Construct.toUri(class_id)}
     xmlns:owl="http://www.w3.org/2002/07/owl#"
     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
     <rdfs:label>{classname}</rdfs:label>
-    {
-      if(subclass_id != "")
-	<rdfs:subClassOf rdf:resource={Construct.toUri(subclass_id)}/>
-    }
+    {subclass_toOWL()}
     </owl:Class>
   }
   def toXTM_type : Elem = {
@@ -222,6 +254,7 @@ case class OIAW(topics : List[Topic], base_uri: String) extends Construct() {
     <subjectIdentifier href="http://www.networkedplanet.com/psi/npcl/meta-types/topic-type"/>
     <name><value>Topic Type</value></name>
     </topic>
+
     <topic id="t6">
     <itemIdentity href="http://psi.egovpt.org/itemIdentifiers#t6"/>
     <subjectIdentifier href="http://www.networkedplanet.com/psi/npcl/meta-types/occurrence-type"/>
@@ -242,18 +275,21 @@ case class OIAW(topics : List[Topic], base_uri: String) extends Construct() {
     <instanceOf><topicRef href="#t1"/></instanceOf>
     <name><value>Association Role Type</value></name>
     </topic>
+
     <topic id="superclass-subclass">
     <subjectIdentifier href="http://www.topicmaps.org/xtm/1.0/core.xtm#superclass-subclass"/>
     <name>
       <value>superclass-subclass</value>
     </name>
     </topic>
+
     <topic id="superclass">
     <subjectIdentifier href="http://www.topicmaps.org/xtm/1.0/core.xtm#superclass"/>
     <name>
       <value>superclass</value>
     </name>
     </topic>
+
     <topic id="subclass">
     <subjectIdentifier href="http://www.topicmaps.org/xtm/1.0/core.xtm#subclass"/>
     <name>
