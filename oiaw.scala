@@ -56,7 +56,7 @@ case class Property(val property_name : String,
 	     <owl:sameAs rdf:resource={alternate_id}/>
 	}
         <rdfs:domain rdf:resource={Construct.toUri(domain)}/>
-	<rdfs:range rdf:resource={Construct.toValueDomain(value_range)}/> 
+	  <rdfs:range rdf:resource={Construct.toValueDomain(value_range)}/> 
     </owl:DatatypeProperty>
   }
 
@@ -65,7 +65,7 @@ case class Property(val property_name : String,
     <subjectIdentifier href={Construct.toUri(property_id)}/>
     {
       if(alternate_id != "")
-	<subjectIdentifier href={Construct.toUri(alternate_id)}/>
+	      <subjectIdentifier href={Construct.toUri(alternate_id)}/>
     }
     <instanceOf><topicRef href="t6"/></instanceOf>
     <name><value>{property_name}</value></name>
@@ -105,12 +105,12 @@ case class Relationship(val relationship_name : String,
     relationship_characteristics match {
       case inverseOf_re(inverse_of_id) => {
 	List(<owl:inverseOf 
-           rdf:resource={Construct.toUri(player_type2 + "-" + inverse_of_id + "-" + player_type1)}
+           rdf:resource={Construct.toUri(player_type2 + "_" + inverse_of_id + "_" + player_type1)}
 	   xmlns:owl="http://www.w3.org/2002/07/owl#"/>)
       }
       case inverseOf_transitive_re(inverse_of_id) => {
-	List(<owl:inverseOf 
-             rdf:resource={Construct.toUri(player_type2 + "-" + inverse_of_id + "-" + player_type1)}
+	      List(<owl:inverseOf 
+             rdf:resource={Construct.toUri(player_type2 + "_" + inverse_of_id + "_" + player_type1)}
 	     xmlns:owl="http://www.w3.org/2002/07/owl#"/>,
              <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#TransitiveProperty"/>)
       }
@@ -129,7 +129,7 @@ case class Relationship(val relationship_name : String,
     </owl:ObjectProperty>
   }
   def toOWL() = {
-    <owl:ObjectProperty rdf:about={Construct.toUri(player_type1 + "-" + relationship_id + "-" + player_type2)}
+    <owl:ObjectProperty rdf:about={Construct.toUri(player_type1 + "_" + relationship_id + "_" + player_type2)}
     xmlns:owl="http://www.w3.org/2002/07/owl#"
     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">

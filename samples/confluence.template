@@ -1,0 +1,11 @@
+class-separator: h2\\. .*$
+
+class-header: \\|\\|\\s*Class name\\s*\\|\\|\\s*Short description\\s*\\|\\|\\s*ID\\s*\\|\\|\\s*Alternate ID\\s*\\|\\|\\s*Subclass of\\s*\\|\\|
+class-template: \\|{classname}\\|[^\\|]+\\|{class-id}\\|[^\\|]+\\|{subclass-of}\\|
+
+properties-header: \\|\\|\\s*Property name\\s*\\|\\|\\s*Short description\\s*\\|\\|\\s*ID\\s*\\|\\|\\s*Alternate ID\\s*\\|\\|\\s*Typical value domains\\s*\\s*\\|\\|
+properties-template: \\|{property-name}\\|{property-description}\\|{property-id}\\|{alternate-id}\\|{value-domain}\\|
+
+relationships-header: \\|\\|\\s*Name\\s*\\|\\|\\s*Short description\\s*\\|\\|\\s*Type-ID\\s*\\|\\|\\s*Player type 1\\s*\\|\\|\\s*Role type 1\\s*\\|\\|\\s*Player type 2\\s*\\|\\|\\s*Role type 2\\s*\\s*\\|\\|\\s*Characteristics\\s*\\s*\\|\\|
+
+relationships-template: \\|{relationship-name}\\|{relationship-description}\\|{relationship-id}\\|{player-type1}\\|{role-type1}\\|{player-type2}\\|{role-type2}\\|{relationship-characteristics}\\|
