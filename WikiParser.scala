@@ -102,10 +102,11 @@ class TopicParser(val start_class_regexp : Regex,
 		{ hit =>
 		  val properties = pp.parse_properties(get_group(hit, "class-id"), lines)
 		 val relationships = rp.parse_relationships(get_group(hit, "class-id"), lines)
+     println("Treating class " + get_group(hit, "class-id"))
 		 new Topic(get_group(hit, "classname"), 
-                           get_group(hit, "class-id"),
-                           get_group(hit, "class-description"),
-                           get_group(hit, "subclass-of"),
+               get_group(hit, "class-id"),
+               get_group(hit, "class-description"),
+               get_group(hit, "subclass-of"),
 		           properties, relationships)})
   }
 }
