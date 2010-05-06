@@ -75,7 +75,11 @@ object OIAWrun {
 	println(moe)
 	usage()
       }
-      case _ => usage()
+      case e : Exception => {
+	println(e)
+	e.printStackTrace
+	usage()
+      }
     }
   }
 }
