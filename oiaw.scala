@@ -168,6 +168,7 @@ case class Relationship(val relationship_name : String,
 
 case class Topic (val classname : String, 
 		  val class_id : String, 
+		  val class_description : String, 
 		  val subclass_id : String,
 		  val properties : List[Property],
 		  val relationships : List[Relationship]) extends Construct() {

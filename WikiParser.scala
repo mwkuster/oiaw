@@ -104,6 +104,7 @@ class TopicParser(val start_class_regexp : Regex,
 		 val relationships = rp.parse_relationships(get_group(hit, "class-id"), lines)
 		 new Topic(get_group(hit, "classname"), 
                            get_group(hit, "class-id"),
+                           get_group(hit, "class-description"),
                            get_group(hit, "subclass-of"),
 		           properties, relationships)})
   }

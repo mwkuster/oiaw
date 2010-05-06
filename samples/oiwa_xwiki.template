@@ -1,7 +1,7 @@
 class-separator: == [\\w ]+ ==
 
-class-header: \\|=\\s*Classname\\s*\\|=\\s*ID\\s*\\|=\\s*Subclass of
-class-template: \\|{classname}\\|{class-id}\\|{subclass-of}
+class-header: \\|=\\s*Classname\\s*\\|=\\s*Short description\\s*\\|=\\s*ID\\s*\\|=\\s*Subclass of
+class-template: \\|{classname}\\|{class-description}\\|{class-id}\\|{subclass-of}
 
 properties-header: \\|=\\s*Property name\\s*\\|=\\s*Short description\\s*\\|=\\s*ID\\s*\\|=\\s*Alternate ID\\s*\\|=\\s*Typical value domains
 properties-template: \\|{property-name}\\|{property-description}\\|{property-id}\\|{alternate-id}\\|{value-domain}
