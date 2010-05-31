@@ -71,14 +71,14 @@ object OIAWrun {
       }
     } catch {
       case moe : org.apache.commons.cli.MissingOptionException => {
-	println("Missing option")
-	println(moe)
-	usage()
+	      println("Missing option")
+	      println(moe)
+	      usage()
       }
       case e : Exception => {
-	println(e)
-	e.printStackTrace
-	usage()
+	      println(e)
+        e.printStackTrace
+	      usage()
       }
     }
   }
