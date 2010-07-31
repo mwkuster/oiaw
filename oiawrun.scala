@@ -36,7 +36,7 @@ object OIAWrun {
     help_option.setRequired(false)
     options.addOption(help_option)
 
-    val import_option = new Option("i", "help", true, "URI or path for an ontology that is imported")
+    val import_option = new Option("i", "import", true, "URI or path for an ontology that is imported")
     import_option.setRequired(false)
     options.addOption(import_option)
     
