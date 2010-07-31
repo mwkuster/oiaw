@@ -60,8 +60,10 @@ class PropertyParser(val start_properties_regexp : Regex,
                 {hit => new Property(get_group(hit, "property-name"), 
                                      get_group(hit, "property-description"), 
                                      get_group(hit, "property-id"),
-		                     get_group(hit, "alternate-id"), range_class_id, 
-                                     get_group(hit, "value-domain"))})
+		                     get_group(hit, "alternate-id"), 
+				     range_class_id, 
+                                     get_group(hit, "value-domain"),
+				     get_group(hit, "cardinality"))})
   }
 }
 
@@ -87,7 +89,8 @@ class RelationshipParser(val start_relationships_regexp : Regex,
 						get_group(hit, "role-type1"),
 			                        get_group(hit, "player-type2"), 
 						get_group(hit, "role-type2"),
-						get_group(hit, "relationship-characteristics"))})
+						get_group(hit, "relationship-characteristics"),
+						get_group(hit, "cardinality"))})
 	}
 }
 

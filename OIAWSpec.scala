@@ -56,7 +56,7 @@ class OIAWSpec extends WordSpec with ShouldMatchers  {
   }
 
   "OAIW" should {
-    val oiaw = new OIAW(tops, "http://www.budabe.eu/oiaw/test#")
+    val oiaw = new OIAW(tops, "http://www.budabe.eu/oiaw/test#", "")
     val owl = oiaw.toOWL
     val xtm = oiaw.toXTM
 

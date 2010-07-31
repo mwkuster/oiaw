@@ -35,6 +35,10 @@ object OIAWrun {
     val help_option = new Option("h", "help", false, "Help message")
     help_option.setRequired(false)
     options.addOption(help_option)
+
+    val import_option = new Option("i", "help", true, "URI or path for an ontology that is imported")
+    import_option.setRequired(false)
+    options.addOption(import_option)
     
     val source_options = new OptionGroup()
     source_options.addOption(new Option("u", "url", true, "URL to load the Wiki page from"))
@@ -62,8 +66,10 @@ object OIAWrun {
 	  Source.fromURL(cmd.getOptionValue("u"))
 	}
       val w = new WikiParser(src, cmd.getOptionValue("t"))
-      
-      val oiaw = new OIAW(w.get_topics, cmd.getOptionValue('b'))
+
+      val import_uri = if(cmd.hasOption('i')) cmd.getOptionValue("i") else ""
+      println("import_uri: " + import_uri)
+      val oiaw = new OIAW(w.get_topics, cmd.getOptionValue('b'), import_uri)
       cmd.getOptionValue('f') match {
 	case "OWL" => oiaw.saveOWL(cmd.getOptionValue('o'))
 	case "TM" => oiaw.saveXTM(cmd.getOptionValue('o'))

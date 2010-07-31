@@ -12,7 +12,7 @@ abstract class Construct() {
    * Creates the association between the construct and its constraints
    */
   //def toXTM_type() : Elem
-  def toOWL() : Elem
+  def toOWL() : List[Elem]
 }
 
 object Construct {
@@ -31,9 +31,61 @@ object Construct {
 
   def toValueDomain(resource_uri : String) : String = {
     resource_uri match {
-      case existing_type_re(xsd_type) => xsd_type
-      case "" => "xsd:string"
-      case _ => "xsd:string" //free text descriptions
+      case existing_type_re(xsd_type) => xsd_type.replace("xsd:", "http://www.w3.org/2001/XMLSchema#")
+      case "" => "http://www.w3.org/2001/XMLSchema#string"
+      case _ => "http://www.w3.org/2001/XMLSchema#string" //free text descriptions
+    }
+  }
+
+  /**
+   * Creation of the cardinality restrictions for the various properties
+   *
+   * The function supports only those cardinalities that are primarily needed, could easily be extended to cover more generic cases
+   */
+  def toCardinality(domain : String, property_id : String, cardinality : String) : List[Elem] = {
+    cardinality match {
+      case "1" => {
+	List(
+	  <owl:Class rdf:about={Construct.toUri(domain)}
+	  xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+	  xmlns:owl="http://www.w3.org/2002/07/owl#" 
+	  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+          <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource={Construct.toUri(property_id)}/>
+                <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:cardinality>
+            </owl:Restriction>
+          </rdfs:subClassOf>
+	  </owl:Class>
+	)
+      }
+      case "0..1" => List(
+	 <owl:Class rdf:about={Construct.toUri(domain)}
+	  xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+	  xmlns:owl="http://www.w3.org/2002/07/owl#" 
+	  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+          <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource={Construct.toUri(property_id)}/>
+                <owl:maxQualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:maxQualifiedCardinality>
+            </owl:Restriction>
+          </rdfs:subClassOf>
+	  </owl:Class>
+      )	
+      case "1..*" => List(
+	 <owl:Class rdf:about={Construct.toUri(domain)}
+	  xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+	  xmlns:owl="http://www.w3.org/2002/07/owl#" 
+	  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+          <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource={Construct.toUri(property_id)}/>
+                <owl:minQualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:minQualifiedCardinality>
+            </owl:Restriction>
+          </rdfs:subClassOf>
+	  </owl:Class>
+      )	//maximal cardinality is implied to be *
+      case _ => List() //includes 0..* which means effectively no restriction
     }
   }
 }
@@ -43,21 +95,28 @@ case class Property(val property_name : String,
 		    val property_id : String, 
 		    val alternate_id : String,
 		    val domain : String,
-		    val value_range : String) extends Construct() {
+		    val value_range : String,
+		    val cardinality : String) extends Construct() {
   def toOWL() = {
+    println("Cardinality: " + cardinality)
+    println("Property_id: " + property_id)
+    println("Domain: " + domain)
+    println("Value_range: " + value_range)
+    
+    
     <owl:DatatypeProperty rdf:about={Construct.toUri(property_id)}
     xmlns:owl="http://www.w3.org/2002/07/owl#"
     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
     <rdfs:comment>{property_description}</rdfs:comment>
     <rdfs:label>{property_name}</rdfs:label>
-        {
-	  if(alternate_id != "")
-	     <owl:sameAs rdf:resource={alternate_id}/>
-	}
-        <rdfs:domain rdf:resource={Construct.toUri(domain)}/>
-	  <rdfs:range rdf:resource={Construct.toValueDomain(value_range)}/> 
-    </owl:DatatypeProperty>
+    {
+      if(alternate_id != "")
+	<owl:sameAs rdf:resource={alternate_id}/>
+    }
+    <rdfs:domain rdf:resource={Construct.toUri(domain)}/>
+    <rdfs:range rdf:resource={Construct.toValueDomain(value_range)}/> 
+    </owl:DatatypeProperty> :: Construct.toCardinality(domain, property_id, cardinality)
   }
 
   def toXTM() = {
@@ -96,7 +155,8 @@ case class Relationship(val relationship_name : String,
 			val role_type1 : String,
 			val player_type2 : String,
 			val role_type2 : String,
-			val relationship_characteristics : String) extends Construct() {
+			val relationship_characteristics : String,
+			val cardinality : String) extends Construct() {
   val inverseOf_re = """\s*inverseOf:\s*(\w+)\s*""".r
   val inverseOf_transitive_re = """\s*transitiveProperty;\s*inverseOf:\s*(\w+)\s*""".r
   val transitive_re = """\s*(transitiveProperty)\s*""".r
@@ -129,17 +189,22 @@ case class Relationship(val relationship_name : String,
     </owl:ObjectProperty>
   }
   def toOWL() = {
-    <owl:ObjectProperty rdf:about={Construct.toUri(player_type1 + "_" + relationship_id + "_" + player_type2)}
-    xmlns:owl="http://www.w3.org/2002/07/owl#"
-    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
-    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
-        <rdfs:label>{relationship_name}</rdfs:label>
-        <rdfs:comment>{relationship_description}</rdfs:comment>
-        <rdfs:domain rdf:resource={Construct.toUri(player_type2)}/>
-        <rdfs:range rdf:resource={Construct.toUri(player_type1)}/>
-        <rdfs:subPropertyOf rdf:resource={Construct.toUri(relationship_id)}/>
-        {get_characteristics()}
-    </owl:ObjectProperty>
+    println("Cardinality: " + cardinality)
+    println("Relationship_id: " + player_type1 + "_" + relationship_id + "_" + player_type2)
+    println("Player1: " + player_type1)
+    println("Player2: " + player_type2)
+
+      <owl:ObjectProperty rdf:about={Construct.toUri(player_type1 + "_" + relationship_id + "_" + player_type2)}
+      xmlns:owl="http://www.w3.org/2002/07/owl#"
+      xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+      xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+      <rdfs:label>{relationship_name}</rdfs:label>
+      <rdfs:comment>{relationship_description}</rdfs:comment>
+      <rdfs:domain rdf:resource={Construct.toUri(player_type2)}/>
+      <rdfs:range rdf:resource={Construct.toUri(player_type1)}/>
+      <rdfs:subPropertyOf rdf:resource={Construct.toUri(relationship_id)}/>
+      {get_characteristics()}
+      </owl:ObjectProperty> ::  Construct.toCardinality(player_type1, player_type1 + "_" + relationship_id + "_" + player_type2, cardinality)
   }
 
   def toXTM() = {
@@ -181,13 +246,15 @@ case class Topic (val classname : String,
   }
 
   def toOWL() = {
-    <owl:Class rdf:about={Construct.toUri(class_id)}
-    xmlns:owl="http://www.w3.org/2002/07/owl#"
-    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
-    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
-    <rdfs:label>{classname}</rdfs:label>
-    {subclass_toOWL()}
-    </owl:Class>
+    List(
+      <owl:Class rdf:about={Construct.toUri(class_id)}
+      xmlns:owl="http://www.w3.org/2002/07/owl#"
+      xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+      xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+      <rdfs:label>{classname}</rdfs:label>
+      {subclass_toOWL()}
+      </owl:Class>
+    )
   }
   def toXTM_type : Elem = {
     <association> 
@@ -212,9 +279,9 @@ case class Topic (val classname : String,
   }
 }
 
-case class OIAW(topics : List[Topic], base_uri: String) extends Construct() {
+case class OIAW(topics : List[Topic], base_uri: String, import_uri : String) extends Construct() {
   Construct.base_uri = base_uri
-
+  
   /**
    * This internal class exists only to program around a bug in the scala ParsedEntityDecl
    * the toString method is not correctly overridden in that class
@@ -233,6 +300,7 @@ case class OIAW(topics : List[Topic], base_uri: String) extends Construct() {
 					   new PE("rdfs", new IntDef("http://www.w3.org/2000/01/rdf-schema#")),
 					   new PE("oiaw", new IntDef("http://www.budabe.eu/oiaw"))))
   def toOWL() = {
+    List(
     <rdf:RDF xmlns="http://psi.egovpt.org/types/"
     xml:base={Construct.base_uri}
     xmlns:owl2xml="http://www.w3.org/2006/12/owl2-xml#"
@@ -241,12 +309,15 @@ case class OIAW(topics : List[Topic], base_uri: String) extends Construct() {
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
     xmlns:types="http://psi.egovpt.org/types/"
     xmlns:owl="http://www.w3.org/2002/07/owl#">
-    <owl:Ontology rdf:about={Construct.base_uri + "ontology"}/>
-    {topics.map {top => top.toOWL} }
-    {topics.map {top => top.properties.map {prop => prop.toOWL} } }
-    {topics.map {top => top.relationships.map {rel => rel.toOWLBasic} } }
-    {topics.map {top => top.relationships.map {rel => rel.toOWL} } }
-    </rdf:RDF>
+    <owl:Ontology rdf:about={Construct.base_uri + "ontology"}>
+      {if(import_uri != "") List(<owl:imports rdf:resource={import_uri}/>) else List()}
+      </owl:Ontology>
+      {topics.map {top => top.toOWL} }
+      {topics.map {top => top.properties.map {prop => prop.toOWL} } }
+      {topics.map {top => top.relationships.map {rel => rel.toOWLBasic} } }
+      {topics.map {top => top.relationships.map {rel => rel.toOWL} } }
+      </rdf:RDF>
+      )
   }
 
   def toXTM() = {
@@ -335,7 +406,7 @@ case class OIAW(topics : List[Topic], base_uri: String) extends Construct() {
 
   def saveOWL(filename : String) {
     //XML.saveFull(filename, toOWL, "UTF-8", true, oiaw.docType)
-    XML.saveFull(filename, toOWL, "UTF-8", true, null)
+    XML.saveFull(filename, toOWL()(0), "UTF-8", true, null)
   }
 
   def saveXTM(filename : String) {
