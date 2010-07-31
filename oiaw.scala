@@ -42,7 +42,7 @@ object Construct {
    *
    * The function supports only those cardinalities that are primarily needed, could easily be extended to cover more generic cases
    */
-  def toCardinality(domain : String, property_id : String, cardinality : String) : List[Elem] = {
+  def toCardinality(domain : String, property_id : String, cardinality : String, range : String) : List[Elem] = {
     cardinality match {
       case "1" => {
 	List(
@@ -54,6 +54,7 @@ object Construct {
             <owl:Restriction>
                 <owl:onProperty rdf:resource={Construct.toUri(property_id)}/>
                 <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:cardinality>
+	        {if(range != "") List(<owl:onClass rdf:resource={Construct.toUri(range)}/>) else List()}
             </owl:Restriction>
           </rdfs:subClassOf>
 	  </owl:Class>
@@ -68,6 +69,7 @@ object Construct {
             <owl:Restriction>
                 <owl:onProperty rdf:resource={Construct.toUri(property_id)}/>
                 <owl:maxQualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:maxQualifiedCardinality>
+	        {if(range != "") List(<owl:onClass rdf:resource={Construct.toUri(range)}/>) else List()}
             </owl:Restriction>
           </rdfs:subClassOf>
 	  </owl:Class>
@@ -81,6 +83,7 @@ object Construct {
             <owl:Restriction>
                 <owl:onProperty rdf:resource={Construct.toUri(property_id)}/>
                 <owl:minQualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:minQualifiedCardinality>
+	        {if(range != "") List(<owl:onClass rdf:resource={Construct.toUri(range)}/>) else List()}
             </owl:Restriction>
           </rdfs:subClassOf>
 	  </owl:Class>
@@ -116,7 +119,7 @@ case class Property(val property_name : String,
     }
     <rdfs:domain rdf:resource={Construct.toUri(domain)}/>
     <rdfs:range rdf:resource={Construct.toValueDomain(value_range)}/> 
-    </owl:DatatypeProperty> :: Construct.toCardinality(domain, property_id, cardinality)
+    </owl:DatatypeProperty> :: Construct.toCardinality(domain, property_id, cardinality, "")
   }
 
   def toXTM() = {
@@ -204,7 +207,7 @@ case class Relationship(val relationship_name : String,
       <rdfs:range rdf:resource={Construct.toUri(player_type1)}/>
       <rdfs:subPropertyOf rdf:resource={Construct.toUri(relationship_id)}/>
       {get_characteristics()}
-      </owl:ObjectProperty> ::  Construct.toCardinality(player_type1, player_type1 + "_" + relationship_id + "_" + player_type2, cardinality)
+      </owl:ObjectProperty> ::  Construct.toCardinality(player_type1, player_type1 + "_" + relationship_id + "_" + player_type2, cardinality, player_type2)
   }
 
   def toXTM() = {
