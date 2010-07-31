@@ -106,20 +106,24 @@ case class Property(val property_name : String,
     println("Domain: " + domain)
     println("Value_range: " + value_range)
     
-    
-    <owl:DatatypeProperty rdf:about={Construct.toUri(property_id)}
-    xmlns:owl="http://www.w3.org/2002/07/owl#"
-    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
-    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
-    <rdfs:comment>{property_description}</rdfs:comment>
-    <rdfs:label>{property_name}</rdfs:label>
-    {
-      if(alternate_id != "")
-	<owl:sameAs rdf:resource={alternate_id}/>
-    }
-    <rdfs:domain rdf:resource={Construct.toUri(domain)}/>
-    <rdfs:range rdf:resource={Construct.toValueDomain(value_range)}/> 
-    </owl:DatatypeProperty> :: Construct.toCardinality(domain, property_id, cardinality, "")
+    List(
+      <owl:DatatypeProperty rdf:about={Construct.toUri(domain + "_" + property_id)}
+      xmlns:owl="http://www.w3.org/2002/07/owl#"
+      xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+      xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+      <rdfs:comment>{property_description}</rdfs:comment>
+      <rdfs:label>{property_name}</rdfs:label>
+      <rdfs:subPropertyOf rdf:resource={Construct.toUri(property_id)}/>
+      {
+	if(alternate_id != "")
+	  <owl:sameAs rdf:resource={alternate_id}/>
+      }
+      <rdfs:domain rdf:resource={Construct.toUri(domain)}/>
+      <rdfs:range rdf:resource={Construct.toValueDomain(value_range)}/> 
+      </owl:DatatypeProperty>,
+      <owl:DatatypeProperty rdf:about={Construct.toUri(property_id)}  
+      xmlns:owl="http://www.w3.org/2002/07/owl#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+    ) ++ Construct.toCardinality(domain, domain + "_" + property_id, cardinality, "")
   }
 
   def toXTM() = {
@@ -203,8 +207,8 @@ case class Relationship(val relationship_name : String,
       xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
       <rdfs:label>{relationship_name}</rdfs:label>
       <rdfs:comment>{relationship_description}</rdfs:comment>
-      <rdfs:domain rdf:resource={Construct.toUri(player_type2)}/>
-      <rdfs:range rdf:resource={Construct.toUri(player_type1)}/>
+      <rdfs:domain rdf:resource={Construct.toUri(player_type1)}/>
+      <rdfs:range rdf:resource={Construct.toUri(player_type2)}/>
       <rdfs:subPropertyOf rdf:resource={Construct.toUri(relationship_id)}/>
       {get_characteristics()}
       </owl:ObjectProperty> ::  Construct.toCardinality(player_type1, player_type1 + "_" + relationship_id + "_" + player_type2, cardinality, player_type2)
