@@ -32,6 +32,7 @@ object Construct {
   def toValueDomain(resource_uri : String) : String = {
     resource_uri match {
       case existing_type_re(xsd_type) => xsd_type.replace("xsd:", "http://www.w3.org/2001/XMLSchema#")
+      case existing_url_re(uri) => uri
       case "" => "http://www.w3.org/2001/XMLSchema#string"
       case _ => "http://www.w3.org/2001/XMLSchema#string" //free text descriptions
     }
