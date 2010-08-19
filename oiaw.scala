@@ -165,8 +165,8 @@ case class Relationship(val relationship_name : String,
 			val role_type2 : String,
 			val relationship_characteristics : String,
 			val cardinality : String) extends Construct() {
-  val inverseOf_re = """\s*inverseOf:\s*(\w+)\s*""".r
-  val inverseOf_transitive_re = """\s*transitiveProperty;\s*inverseOf:\s*(\w+)\s*""".r
+  val inverseOf_re = """\s*inverseOf:\s*([-\w]+)\s*""".r
+  val inverseOf_transitive_re = """\s*transitiveProperty;\s*inverseOf:\s*([-\w]+)\s*""".r
   val transitive_re = """\s*(transitiveProperty)\s*""".r
 
   def get_characteristics() : List[Elem] = {
