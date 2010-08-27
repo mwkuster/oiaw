@@ -65,9 +65,9 @@ class OIAWSpec extends WordSpec with ShouldMatchers  {
       val class_elems  = owl \\ "Class"
       assert(class_elems.length == 14)
     }
-    "generate 31 OWL data properties" in {
+    "generate 62 OWL data properties (31 real, 31 superproperties)" in {
       val props_elems  = owl \\ "DatatypeProperty"
-      assert(props_elems.length == 31)
+      assert(props_elems.length == 62)
     }
     "generate 23 * 2 object properties" in {
       val props_elems  = owl \\ "ObjectProperty"

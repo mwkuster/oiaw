@@ -317,7 +317,7 @@ case class OIAW(topics : List[Topic], base_uri: String, import_uri : String) ext
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
     xmlns:types="http://psi.egovpt.org/types/"
     xmlns:owl="http://www.w3.org/2002/07/owl#">
-    <owl:Ontology rdf:about={Construct.base_uri + "ontology"}>
+    <owl:Ontology rdf:about={Construct.base_uri.slice(0, Construct.base_uri.length - 1)}>
       {if(import_uri != "") List(<owl:imports rdf:resource={import_uri}/>) else List()}
       </owl:Ontology>
       {topics.map {top => top.toOWL} }
