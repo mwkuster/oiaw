@@ -19,7 +19,7 @@ object Construct {
   var base_uri : String = ""
   val scope = new NamespaceBinding("rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#", TopScope)
 
-  val existing_url_re = """http://(.*)""".r
+  val existing_url_re = """(http://.*)""".r
   val existing_type_re = """.*(xsd:\w+).*""".r
 
   def toUri(resource_uri : String) : String = {
