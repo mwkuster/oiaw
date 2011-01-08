@@ -2,19 +2,20 @@
 <project name="oiaw" basedir="." default="build">
   <property name="src.dir" value="."/>
   <property name="build.dir" value="classes"/>
-  <property name="scala.home" value="/opt/local/share/scala-2.7/lib/"/>
+  <property name="lib.dir" value="${src.dir}/lib"/>
+  <property name="scala.home" value="/opt/local/share/scala-2.8/lib/"/>
 
   <path id="app.classpath">
-    <pathelement location="${src.dir}/lib/scala-compiler.jar"/>
-    <pathelement location="${src.dir}/lib/scala-library.jar"/>
-    <pathelement location="${src.dir}/lib/commons-cli-1.2.jar"/>
-    <pathelement location="${src.dir}/lib/scalatest-1.0.jar"/>
+    <pathelement location="${lib.dir}/scala-compiler.jar"/>
+    <pathelement location="${lib.dir}/scala-library.jar"/>
+    <pathelement location="${lib.dir}/commons-cli-1.2.jar"/>
+    <pathelement location="${lib.dir}/scalatest-1.2.jar"/>
   </path>
 
    <taskdef resource="scala/tools/ant/antlib.xml">
     <classpath>
-      <pathelement location="${src.dir}/lib/scala-compiler.jar"/>
-      <pathelement location="${src.dir}/lib/scala-library.jar"/>
+      <pathelement location="${scala.home}/scala-compiler.jar"/>
+      <pathelement location="${scala.home}/scala-library.jar"/>
     </classpath>
   </taskdef> 
 

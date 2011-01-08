@@ -287,26 +287,15 @@ case class Topic (val classname : String,
   }
 }
 
-case class OIAW(topics : List[Topic], base_uri: String, import_uri : String) extends Construct() {
-  Construct.base_uri = base_uri
+case class OIAW(topics : List[Topic], b_uri: String, import_uri : String) extends Construct() {
+  Construct.base_uri = b_uri //using the name base_uri causes a java.lang.VerifyError: class eu.budabe.oiaw.OIAW overrides final method base_uri.()Ljava/lang/String;
   
-  /**
-   * This internal class exists only to program around a bug in the scala ParsedEntityDecl
-   * the toString method is not correctly overridden in that class
-   */
-  class PE(name: String, entdef: EntityDef) extends scala.xml.dtd.ParsedEntityDecl(name, entdef) {
-    override def toString : String = {
-      val sb = new StringBuilder()
-      
-      return this.toString(sb).toString
-    }
-  }
   val docType = scala.xml.dtd.DocType("rdf:RDF", SystemID(""), 
-				      List(new PE("rdf", new IntDef("http://www.w3.org/1999/02/22-rdf-syntax-ns#")), 
-					   new PE("owl", new IntDef("http://www.w3.org/2002/07/owl#")),
-					   new PE("xsd", new IntDef("http://www.w3.org/2001/XMLSchema#")),
-					   new PE("rdfs", new IntDef("http://www.w3.org/2000/01/rdf-schema#")),
-					   new PE("oiaw", new IntDef("http://www.budabe.eu/oiaw"))))
+				      List(new scala.xml.dtd.ParsedEntityDecl("rdf", new IntDef("http://www.w3.org/1999/02/22-rdf-syntax-ns#")), 
+					   new scala.xml.dtd.ParsedEntityDecl("owl", new IntDef("http://www.w3.org/2002/07/owl#")),
+					   new scala.xml.dtd.ParsedEntityDecl("xsd", new IntDef("http://www.w3.org/2001/XMLSchema#")),
+					   new scala.xml.dtd.ParsedEntityDecl("rdfs", new IntDef("http://www.w3.org/2000/01/rdf-schema#")),
+					   new scala.xml.dtd.ParsedEntityDecl("oiaw", new IntDef("http://www.budabe.eu/oiaw"))))
   def toOWL() = {
     List(
     <rdf:RDF xmlns="http://psi.egovpt.org/types/"
@@ -413,13 +402,11 @@ case class OIAW(topics : List[Topic], base_uri: String, import_uri : String) ext
   }
 
   def saveOWL(filename : String) {
-    //XML.saveFull(filename, toOWL, "UTF-8", true, oiaw.docType)
-    XML.saveFull(filename, toOWL()(0), "UTF-8", true, null)
+    XML.save(filename, toOWL()(0), "UTF-8", true, null)
   }
 
   def saveXTM(filename : String) {
-    //XML.saveFull(filename, toOWL, "UTF-8", true, oiaw.docType)
-    XML.saveFull(filename, toXTM, "UTF-8", true, null)
+    XML.save(filename, toXTM, "UTF-8", true, null)
   }
 }
 

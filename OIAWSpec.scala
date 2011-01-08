@@ -80,7 +80,7 @@ class OIAWSpec extends WordSpec with ShouldMatchers  {
       val res_class = (owl \\ "Class")(0)
       val res_id = res_class.attribute("http://www.w3.org/1999/02/22-rdf-syntax-ns#", "about")
       assert(res_id.isDefined)
-      assert(res_id.get == "http://www.budabe.eu/oiaw/test#resource")
+      assert(res_id.get.toString == "http://www.budabe.eu/oiaw/test#resource")
     }
     "generate 14 + 31 + 23 + 16 topics (16 is the number of base topics)" in {
       val res_tops = xtm \\ "topic"
