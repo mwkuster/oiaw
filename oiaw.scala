@@ -167,7 +167,8 @@ case class Relationship(val relationship_name : String,
 			val cardinality : String) extends Construct() {
   val inverseOf_re = """\s*inverseOf:\s*([-\w]+)\s*""".r
   val inverseOf_transitive_re = """\s*transitiveProperty;\s*inverseOf:\s*([-\w]+)\s*""".r
-  val transitive_re = """\s*(transitiveProperty)\s*""".r
+  val transitive_re = """\s*transitiveProperty\s*""".r
+  val symmetric_re = """\s*symmetric\s*""".r
 
   def get_characteristics() : List[Elem] = {
     relationship_characteristics match {
@@ -182,7 +183,10 @@ case class Relationship(val relationship_name : String,
 	     xmlns:owl="http://www.w3.org/2002/07/owl#"/>,
              <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#TransitiveProperty"/>)
       }
-      case transitive_re(tr) => {
+      case symmetric_re() => {
+	List(<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#SymmetricProperty"/>)
+      }
+      case transitive_re() => {
 	List(<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#TransitiveProperty"/>)
       }
       case _ => Nil
