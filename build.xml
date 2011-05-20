@@ -3,7 +3,6 @@
   <property name="src.dir" value="."/>
   <property name="build.dir" value="classes"/>
   <property name="lib.dir" value="${src.dir}/lib"/>
-  <property name="scala.home" value="/opt/local/share/scala-2.8/lib/"/>
 
   <path id="app.classpath">
     <pathelement location="${lib.dir}/scala-compiler.jar"/>
@@ -14,8 +13,8 @@
 
    <taskdef resource="scala/tools/ant/antlib.xml">
     <classpath>
-      <pathelement location="${scala.home}/scala-compiler.jar"/>
-      <pathelement location="${scala.home}/scala-library.jar"/>
+      <pathelement location="${lib.dir}/scala-compiler.jar"/>
+      <pathelement location="${lib.dir}/scala-library.jar"/>
     </classpath>
   </taskdef> 
 
