@@ -123,7 +123,9 @@ case class Property(val property_name : String,
       <rdfs:range rdf:resource={Construct.toValueDomain(value_range)}/> 
       </owl:DatatypeProperty>,
       <owl:DatatypeProperty rdf:about={Construct.toUri(property_id)}  
-      xmlns:owl="http://www.w3.org/2002/07/owl#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+      xmlns:owl="http://www.w3.org/2002/07/owl#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+      <rdfs:label>{property_id}</rdfs:label>
+      </owl:DatatypeProperty>
     ) ++ Construct.toCardinality(domain, domain + "_" + property_id, cardinality, "")
   }
 
@@ -197,7 +199,7 @@ case class Relationship(val relationship_name : String,
     xmlns:owl="http://www.w3.org/2002/07/owl#"
     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
-    <rdfs:label>{relationship_name}</rdfs:label>
+    <rdfs:label>{relationship_id}</rdfs:label>
     </owl:ObjectProperty>
   }
   def toOWL() = {
@@ -205,7 +207,6 @@ case class Relationship(val relationship_name : String,
     println("Relationship_id: " + player_type1 + "_" + relationship_id + "_" + player_type2)
     println("Player1: " + player_type1)
     println("Player2: " + player_type2)
-
       <owl:ObjectProperty rdf:about={Construct.toUri(player_type1 + "_" + relationship_id + "_" + player_type2)}
       xmlns:owl="http://www.w3.org/2002/07/owl#"
       xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
