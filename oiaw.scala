@@ -71,7 +71,7 @@ object Construct {
           <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource={Construct.toUri(property_id)}/>
-                <owl:maxQualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:maxQualifiedCardinality>
+                <owl:maxCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:maxCardinality>
 	        {if(range != "") List(<owl:onClass rdf:resource={Construct.toUri(range)}/>) else List()}
             </owl:Restriction>
           </rdfs:subClassOf>
@@ -85,7 +85,7 @@ object Construct {
           <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource={Construct.toUri(property_id)}/>
-                <owl:minQualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:minQualifiedCardinality>
+                <owl:minCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:minCardinality>
 	        {if(range != "") List(<owl:onClass rdf:resource={Construct.toUri(range)}/>) else List()}
             </owl:Restriction>
           </rdfs:subClassOf>
