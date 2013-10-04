@@ -36,7 +36,7 @@ object Construct {
     resource_uri match {
       case existing_type_re(xsd_type) => xsd_type.replace("xsd:", "http://www.w3.org/2001/XMLSchema#")
       case rdf_type_re(rdf_type) => rdf_type.replace("rdf:", "http://www.w3.org/1999/02/22-rdf-syntax-ns#")
-      case rdfs_type_re(rdfs_type) => rdfs_type.replace("rdfs:", "http://www.w3.org/1999/02/22-rdf-syntax-ns#")
+      case rdfs_type_re(rdfs_type) => rdfs_type.replace("rdfs:", "http://www.w3.org/2000/01/rdf-schema#")
       case existing_url_re(uri) => uri
       case "" => "http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral"
       case _ => "http://www.w3.org/2001/XMLSchema#string" //free text descriptions
