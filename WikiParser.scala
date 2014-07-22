@@ -63,7 +63,9 @@ class PropertyParser(val start_properties_regexp : Regex,
 		                     get_group(hit, "alternate-id"), 
 				     range_class_id, 
                                      get_group(hit, "value-domain"),
-				     get_group(hit, "cardinality"))})
+				     get_group(hit, "cardinality"),
+                                     get_group(hit, "source-field"),
+                                     get_group(hit, "documentation"))})
   }
 }
 
@@ -90,7 +92,9 @@ class RelationshipParser(val start_relationships_regexp : Regex,
 			                        get_group(hit, "player-type2"), 
 						get_group(hit, "role-type2"),
 						get_group(hit, "relationship-characteristics"),
-						get_group(hit, "cardinality"))})
+						get_group(hit, "cardinality"),
+                                                get_group(hit, "source-field"),
+                                                get_group(hit, "documentation"))})
 	}
 }
 

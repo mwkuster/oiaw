@@ -105,7 +105,9 @@ case class Property(val property_name : String,
 		    val alternate_id : String,
 		    val domain : String,
 		    val value_range : String,
-		    val cardinality : String) extends Construct() {
+		    val cardinality : String,
+                    val source_field : String,
+                    val documentation : String) extends Construct() {
   def toOWL() = {
     println("Cardinality: " + cardinality)
     println("Property_id: " + property_id)
@@ -119,6 +121,8 @@ case class Property(val property_name : String,
       xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
       <rdfs:comment>{property_description}</rdfs:comment>
       <rdfs:label>{property_name}</rdfs:label>
+      <cdm_ann:source_field>{source_field}</cdm_ann:source_field>
+      <cdm_ann:documentation>{documentation}</cdm_ann:documentation>
       <rdfs:subPropertyOf rdf:resource={Construct.toUri(property_id)}/>
       {
 	if(alternate_id != "")
@@ -171,7 +175,9 @@ case class Relationship(val relationship_name : String,
 			val player_type2 : String,
 			val role_type2 : String,
 			val relationship_characteristics : String,
-			val cardinality : String) extends Construct() {
+			val cardinality : String,
+                        val source_field : String,
+                        val documentation : String) extends Construct() {
   val inverseOf_re = """\s*inverseOf:\s*([-\w]+)\s*""".r
   val inverseOf_transitive_re = """\s*transitiveProperty;\s*inverseOf:\s*([-\w]+)\s*""".r
   val transitive_re = """\s*transitiveProperty\s*""".r
@@ -203,7 +209,8 @@ case class Relationship(val relationship_name : String,
     <owl:ObjectProperty rdf:about={Construct.toUri(relationship_id)}
     xmlns:owl="http://www.w3.org/2002/07/owl#"
     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
-    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:cdm_ann="http://publications.europa.eu/ontology/annotation#">
     <rdfs:label>{relationship_id}</rdfs:label>
     </owl:ObjectProperty>
   }
@@ -220,6 +227,8 @@ case class Relationship(val relationship_name : String,
       <rdfs:comment>{relationship_description}</rdfs:comment>
       <rdfs:domain rdf:resource={Construct.toUri(player_type1)}/>
       <rdfs:range rdf:resource={Construct.toUri(player_type2)}/>
+      <cdm_ann:source_field>{source_field}</cdm_ann:source_field>
+      <cdm_ann:documentation>{documentation}</cdm_ann:documentation>
       <rdfs:subPropertyOf rdf:resource={Construct.toUri(relationship_id)}/>
       {get_characteristics()}
       </owl:ObjectProperty> ::  Construct.toCardinality(player_type1, player_type1 + "_" + relationship_id + "_" + player_type2, cardinality, player_type2)
