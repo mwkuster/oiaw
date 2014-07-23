@@ -328,7 +328,7 @@ case class OIAW(topics : List[Topic], b_uri: String, import_uri : String) extend
     xmlns:owl="http://www.w3.org/2002/07/owl#">
     <owl:Ontology rdf:about={Construct.base_uri.slice(0, Construct.base_uri.length - 1)}>
       {if(import_uri != "") List(<owl:imports rdf:resource={import_uri}/>) else List()}
-       <owl:versionInfo rdf:datatype="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">Version 3.1.2  $Id: cdm.rdf 6627 2014-07-22 18:36:04Z kustema $</owl:versionInfo>
+       <owl:versionInfo rdf:datatype="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">Version 1.2.3  $Id $</owl:versionInfo>
       </owl:Ontology>
        <owl:AnnotationProperty rdf:about="http://publications.europa.eu/ontology/annotation#source_field">
         <rdfs:label>Information on the source field (if any) of this metadata element, e.g. in Procat or Pegase</rdfs:label>
