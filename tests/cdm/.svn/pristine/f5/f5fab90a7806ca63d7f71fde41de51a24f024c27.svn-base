@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?><!-- -*- mode: nxml -*- -->
+<project name="oiaw" basedir="." default="build">
+  <property name="src.dir" value="."/>
+  <property name="build.dir" value="classes"/>
+  <property name="lib.dir" value="${src.dir}/lib"/>
+
+  <path id="app.classpath">
+    <pathelement location="${lib.dir}/scala-compiler.jar"/>
+    <pathelement location="${lib.dir}/scala-library.jar"/>
+    <pathelement location="${lib.dir}/commons-cli-1.2.jar"/>
+    <pathelement location="${lib.dir}/scalatest-1.2.jar"/>
+  </path>
+
+   <taskdef resource="scala/tools/ant/antlib.xml">
+    <classpath>
+      <pathelement location="${lib.dir}/scala-compiler.jar"/>
+      <pathelement location="${lib.dir}/scala-library.jar"/>
+    </classpath>
+  </taskdef> 
+
+  <taskdef name="scalatest" classname="org.scalatest.tools.ScalaTestAntTask">
+      <classpath refid="app.classpath"/>
+  </taskdef>
+
+  <target name="build">
+    <mkdir dir="${build.dir}"   />
+    <scalac srcdir="${src.dir}"
+            destdir="${build.dir}"
+            classpathref="app.classpath" 
+            deprecation="yes"
+            unchecked="yes">
+      <include name="**/*.scala"   />
+    </scalac>
+  </target>
+
+  <target name="test" depends="build">
+    <scalatest suite="eu.budabe.oiaw.tests.OIAWSpec" runpath="${build.dir}">
+      <reporter type="stdout"/>
+    </scalatest>
+  </target>
+
+  <target name="dist" depends="build">
+      <delete file="oiaw.jar"/>
+      <delete file="MANIFEST.MF"/>
+
+      <manifest file="MANIFEST.MF">
+        <attribute name="Main-Class" value="eu.budabe.oiaw.OIAW"/>
+      </manifest>
+
+      <jar jarfile="oiaw.jar" basedir="${build.dir}" manifest="MANIFEST.MF"/>
+    </target>
+</project>

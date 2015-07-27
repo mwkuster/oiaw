@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<catalog prefer="public" xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
+    <uri id="User Entered Import Resolution" name="http://www.w3.org/2008/05/skos-xl" uri="skos-xl.rdf"/>
+    <uri id="User Entered Import Resolution" name="http://publications.europa.eu/ontology/cdm/import" uri="import.rdf"/>
+    <group id="Folder Repository, directory=, recursive=true, Auto-Update=true, version=2" prefer="public" xml:base="">
+        <uri id="Automatically generated entry, Timestamp=1429110397908" name="http://publications.europa.eu/ontology/annotation" uri="cdm_annotationproperties.rdf"/>
+        <uri id="Automatically generated entry, Timestamp=1429110397908" name="http://publications.europa.eu/ontology/cdm#" uri="cdm.rdf"/>
+        <uri id="Automatically generated entry, Timestamp=1429110397908" name="http://publications.europa.eu/ontology/cdm/derived_class" uri="cdm_derived_classes.rdf"/>
+        <uri id="Automatically generated entry, Timestamp=1429110397908" name="http://publications.europa.eu/ontology/cdm/indexation" uri="cdm_indexation.rdf"/>
+        <uri id="Automatically generated entry, Timestamp=1429110397908" name="http://publications.europa.eu/ontology/datatype" uri="cdm_datatypes.rdf"/>
+        <uri id="Automatically generated entry, Timestamp=1429110397908" name="http://publications.europa.eu/resource/cdm/import#" uri="import.rdf"/>
+        <uri id="Automatically generated entry, Timestamp=1429110397908" name="http://www.w3.org/2004/02/skos/core" uri="skos.rdf"/>
+    </group>
+</catalog>

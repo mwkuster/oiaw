@@ -1,0 +1,19 @@
+.mw-anchor{border-top:0;font-weight:bold;display:block;line-height:1em;padding:4px;float:right;width:20px;height:18px;}
+#com-atlassian-confluence .studio-header .mw-anchor{margin-top:0;height:16px;}
+#header .aui-style-header .mw-anchor{height:24px;}
+#header .aui-header .mw-anchor{height:14px;padding-top:10px;padding-bottom:16px;padding-right:14px;}
+#notifications-anchor .badge-i{background-image:url(/wikis/s/en_GB/3398/c7c65e1e0ae26ebdb7fdb329e831fd2c1a2ed938.1/1.1.9/_/download/resources/com.atlassian.mywork.mywork-confluence-host-plugin:mw-header-anchor/icon-workday.png);background-repeat:no-repeat;background-position:center center;position:relative;width:16px;height:16px;left:15%;top:20%;pointer-events:none;}
+#notifications-anchor .badge-i.aui-icon,#notifications-anchor.read .badge-i.aui-icon{background-image:none;}
+#notifications-anchor .badge-i.aui-icon:before{content:'G';}
+#notifications-anchor.read .badge-i{background-image:url(/wikis/s/en_GB/3398/c7c65e1e0ae26ebdb7fdb329e831fd2c1a2ed938.1/1.1.9/_/download/resources/com.atlassian.mywork.mywork-confluence-host-plugin:mw-header-anchor/icon-workday-empty.png);}
+#notifications-anchor.read .badge-i.aui-icon:before{content:'H';}
+#notifications-anchor.active,#notifications-anchor:hover{background-color:#326CA6;}
+.studio-header #notifications-anchor:hover{background-color:transparent;}
+.studio-header #notifications-anchor.active{background-color:#036;}
+#notifications-anchor.read .badge{font-size:0;}
+.mw-anchor .badge{color:white;border-radius:7px;font-size:12px;display:inline-block;padding:0 2px;min-width:10px;min-height:10px;}
+.mw-anchor .badge-w{position:absolute;left:50%;top:-4px;width:100%;margin-left:0;text-align:center;pointer-events:none;line-height:14px;text-indent:0;}
+.mw-anchor.unread .badge{background:#3A7EC2;border:1px solid rgba(0,0,0,.2);}
+#inline-dialog-notifications-miniview{z-index:5001;right:6px!important;}
+#inline-dialog-notifications-miniview .contents{padding:0;}
+#notifications-miniview-iframe{border:none;width:500px;height:510px;}
