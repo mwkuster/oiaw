@@ -1,7 +1,7 @@
-== Resource ==
+h2. Resource 
 
-||''Classname||ID || Subclass of''||
-||Resource || resource || ||
+||Class name||Short description || ID || Alternate IDs || Subclass of||
+||Resource || Anything having a URI || resource || ||
 
 ||''Property name  || Short description || ID || Alternate ID || Typical value domains ''||
 ||URI / IRI || Address for electronic access to the resource (e.g. via Web, Email etc.)|| link || - || {{{xsd:anyURI}}} ||
