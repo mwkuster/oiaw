@@ -1,0 +1,1 @@
+java -cp ./lib/scala-parser-combinators_2.11-1.0.6.jar:./lib/scala-xml_2.12-1.0.6.jar:./lib/commons-cli-1.2.jar:./lib/scalatest-app_2.12-3.0.3.jar:./lib/scalatest-1.2.jar:./lib/scala-compiler.jar:./lib/scalap-2.12.2.jar:./lib/scala-library.jar:./lib/scala-reflect.jar:./lib/scalatest-1.0.jar:oiaw.jar eu.budabe.oiaw.OIAWrun %*
