@@ -97,15 +97,24 @@ object Construct {
       case _ => List() //includes 0..* which means effectively no restriction
     }
   }
+
+  def toDeprecated(deprecated : Boolean) : List[Elem] = {
+    if(deprecated) {
+      List(<owl:Deprecated/>)
+    } else {
+      List()
+    }
+  }
 }
 
 case class Property(val property_name : String, 
-		    val property_description : String, 
-		    val property_id : String, 
-		    val alternate_id : String,
-		    val domain : String,
-		    val value_range : String,
-		    val cardinality : String) extends Construct() {
+  val property_description : String,
+  val property_id : String,
+  val alternate_id : String,
+  val domain : String,
+  val value_range : String,
+  val cardinality : String,
+  val deprecated : Boolean) extends Construct() {
   def toOWL() = {
     println("Cardinality: " + cardinality)
     println("Property_id: " + property_id)
@@ -129,9 +138,10 @@ case class Property(val property_name : String,
       </owl:DatatypeProperty>,
       <owl:DatatypeProperty rdf:about={Construct.toUri(property_id)}  
       xmlns:owl="http://www.w3.org/2002/07/owl#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
-      <rdfs:label>{property_id}</rdfs:label>
+        <rdfs:label>{property_id}</rdfs:label>
+        {Construct.toDeprecated(deprecated)}
       </owl:DatatypeProperty>
-    ) ++ Construct.toCardinality(domain, domain + "_" + property_id, cardinality, "")
+    ) ++ Construct.toCardinality(domain, domain + "_" + property_id, cardinality, "") 
   }
 
   def toXTM() = {
@@ -163,15 +173,16 @@ case class Property(val property_name : String,
 }
 
 case class Relationship(val relationship_name : String, 
-			val relationship_description : String, 
-			val relationship_id : String,
-			val domain : String,
-			val player_type1 : String, 
-			val role_type1 : String,
-			val player_type2 : String,
-			val role_type2 : String,
-			val relationship_characteristics : String,
-			val cardinality : String) extends Construct() {
+  val relationship_description : String,
+  val relationship_id : String,
+  val domain : String,
+  val player_type1 : String,
+  val role_type1 : String,
+  val player_type2 : String,
+  val role_type2 : String,
+  val relationship_characteristics : String,
+  val cardinality : String,
+  val deprecated : Boolean) extends Construct() {
   val inverseOf_re = """\s*inverseOf:\s*([-\w]+)\s*""".r
   val inverseOf_transitive_re = """\s*transitiveProperty;\s*inverseOf:\s*([-\w]+)\s*""".r
   val transitive_re = """\s*transitiveProperty\s*""".r
@@ -205,6 +216,7 @@ case class Relationship(val relationship_name : String,
     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
     <rdfs:label>{relationship_id}</rdfs:label>
+    {Construct.toDeprecated(deprecated)}
     </owl:ObjectProperty>
   }
   def toOWL() = {
@@ -212,17 +224,18 @@ case class Relationship(val relationship_name : String,
     println("Relationship_id: " + player_type1 + "_" + relationship_id + "_" + player_type2)
     println("Player1: " + player_type1)
     println("Player2: " + player_type2)
-      <owl:ObjectProperty rdf:about={Construct.toUri(player_type1 + "_" + relationship_id + "_" + player_type2)}
-      xmlns:owl="http://www.w3.org/2002/07/owl#"
-      xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
-      xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
-      <rdfs:label>{relationship_name}</rdfs:label>
-      <rdfs:comment>{relationship_description}</rdfs:comment>
-      <rdfs:domain rdf:resource={Construct.toUri(player_type1)}/>
-      <rdfs:range rdf:resource={Construct.toUri(player_type2)}/>
-      <rdfs:subPropertyOf rdf:resource={Construct.toUri(relationship_id)}/>
-      {get_characteristics()}
-      </owl:ObjectProperty> ::  Construct.toCardinality(player_type1, player_type1 + "_" + relationship_id + "_" + player_type2, cardinality, player_type2)
+    println("Deprecated: " + deprecated)
+    <owl:ObjectProperty rdf:about={Construct.toUri(player_type1 + "_" + relationship_id + "_" + player_type2)}
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+    <rdfs:label>{relationship_name}</rdfs:label>
+    <rdfs:comment>{relationship_description}</rdfs:comment>
+    <rdfs:domain rdf:resource={Construct.toUri(player_type1)}/>
+    <rdfs:range rdf:resource={Construct.toUri(player_type2)}/>
+    <rdfs:subPropertyOf rdf:resource={Construct.toUri(relationship_id)}/>
+    {get_characteristics()}
+    </owl:ObjectProperty> ::  Construct.toCardinality(player_type1, player_type1 + "_" + relationship_id + "_" + player_type2, cardinality, player_type2)
   }
 
   def toXTM() = {
@@ -250,11 +263,12 @@ case class Relationship(val relationship_name : String,
 }
 
 case class Topic (val classname : String, 
-		  val class_id : String, 
-		  val class_description : String, 
-		  val subclass_id : String,
-		  val properties : List[Property],
-		  val relationships : List[Relationship]) extends Construct() {
+  val class_id : String,
+  val class_description : String,
+  val subclass_id : String,
+  val properties : List[Property],
+  val relationships : List[Relationship],
+  val deprecated : Boolean) extends Construct() {
 
   def subclass_toOWL() : List[Elem] = {
     if(subclass_id != "")
@@ -270,7 +284,8 @@ case class Topic (val classname : String,
       xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
       xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
       <rdfs:label>{classname}</rdfs:label>
-      {subclass_toOWL()}
+        {subclass_toOWL()}
+        {Construct.toDeprecated(deprecated)}
       </owl:Class>
     )
   }
