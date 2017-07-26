@@ -2,14 +2,15 @@ package eu.budabe.oiaw.tests
 
 import org.scalatest.WordSpec
 import org.scalatest.Suite
-import org.scalatest.matchers.ShouldMatchers
+//import org.scalatest.matchers.ShouldMatchers
+import org.scalatest.words.ShouldVerb
 
 import scala.xml._
 import scala.xml.dtd._
 
 import eu.budabe.oiaw._
 
-class OIAWSpec extends WordSpec with ShouldMatchers  {
+class OIAWSpec extends WordSpec with ShouldVerb  {
   val w = new WikiParser(scala.io.Source.fromFile("test.wiki"), "oiaw.template")
   val tops = w.get_topics()
 

@@ -8,7 +8,11 @@
     <pathelement location="${lib.dir}/scala-compiler.jar"/>
     <pathelement location="${lib.dir}/scala-library.jar"/>
     <pathelement location="${lib.dir}/commons-cli-1.2.jar"/>
-    <pathelement location="${lib.dir}/scalatest-1.2.jar"/>
+    <pathelement location="${lib.dir}/scalatest-app_2.12-3.0.3.jar"/>
+    <pathelement location="${lib.dir}/scala-parser-combinators_2.11-1.0.6.jar"/>
+    <pathelement location="${lib.dir}/scalap-2.12.2.jar"/>
+    <pathelement location="${lib.dir}/scala-reflect.jar"/>
+    <pathelement location="${lib.dir}/scala-xml_2.12-1.0.6.jar"/>
   </path>
 
    <taskdef resource="scala/tools/ant/antlib.xml">
@@ -34,7 +38,8 @@
   </target>
 
   <target name="test" depends="build">
-    <scalatest suite="eu.budabe.oiaw.tests.OIAWSpec" runpath="${build.dir}">
+    <scalatest runpath="${build.dir}">
+      <suite classname="eu.budabe.oiaw.tests.OIAWSpec"/>
       <reporter type="stdout"/>
     </scalatest>
   </target>
