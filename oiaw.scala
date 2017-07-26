@@ -100,7 +100,7 @@ object Construct {
 
   def toDeprecated(deprecated : Boolean) : List[Elem] = {
     if(deprecated) {
-      List(<owl:Deprecated/>)
+      List(<owl:deprecated/>)
     } else {
       List()
     }
@@ -123,25 +123,25 @@ case class Property(val property_name : String,
     
     List(
       <owl:DatatypeProperty rdf:about={Construct.toUri(domain + "_" + property_id)}
-      xmlns:owl="http://www.w3.org/2002/07/owl#"
-      xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
-      xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
-      <rdfs:comment>{property_description}</rdfs:comment>
-      <rdfs:label>{property_name}</rdfs:label>
-      <rdfs:subPropertyOf rdf:resource={Construct.toUri(property_id)}/>
-      {
-	if(alternate_id != "")
-	  <owl:sameAs rdf:resource={alternate_id}/>
-      }
-      <rdfs:domain rdf:resource={Construct.toUri(domain)}/>
-      <rdfs:range rdf:resource={Construct.toValueDomain(value_range)}/> 
-      </owl:DatatypeProperty>,
-      <owl:DatatypeProperty rdf:about={Construct.toUri(property_id)}  
-      xmlns:owl="http://www.w3.org/2002/07/owl#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
-        <rdfs:label>{property_id}</rdfs:label>
+        xmlns:owl="http://www.w3.org/2002/07/owl#"
+        xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+        <rdfs:comment>{property_description}</rdfs:comment>
+        <rdfs:label>{property_name}</rdfs:label>
         {Construct.toDeprecated(deprecated)}
-      </owl:DatatypeProperty>
-    ) ++ Construct.toCardinality(domain, domain + "_" + property_id, cardinality, "") 
+        <rdfs:subPropertyOf rdf:resource={Construct.toUri(property_id)}/>
+        {
+	  if(alternate_id != "")
+	    <owl:sameAs rdf:resource={alternate_id}/>
+        }
+        <rdfs:domain rdf:resource={Construct.toUri(domain)}/>
+        <rdfs:range rdf:resource={Construct.toValueDomain(value_range)}/>
+        </owl:DatatypeProperty>,
+      <owl:DatatypeProperty rdf:about={Construct.toUri(property_id)}
+        xmlns:owl="http://www.w3.org/2002/07/owl#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+        <rdfs:label>{property_id}</rdfs:label>
+        </owl:DatatypeProperty>
+    ) ++ Construct.toCardinality(domain, domain + "_" + property_id, cardinality, "")
   }
 
   def toXTM() = {
@@ -216,7 +216,6 @@ case class Relationship(val relationship_name : String,
     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
     <rdfs:label>{relationship_id}</rdfs:label>
-    {Construct.toDeprecated(deprecated)}
     </owl:ObjectProperty>
   }
   def toOWL() = {
@@ -231,6 +230,7 @@ case class Relationship(val relationship_name : String,
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
     <rdfs:label>{relationship_name}</rdfs:label>
     <rdfs:comment>{relationship_description}</rdfs:comment>
+    {Construct.toDeprecated(deprecated)}
     <rdfs:domain rdf:resource={Construct.toUri(player_type1)}/>
     <rdfs:range rdf:resource={Construct.toUri(player_type2)}/>
     <rdfs:subPropertyOf rdf:resource={Construct.toUri(relationship_id)}/>
@@ -283,10 +283,10 @@ case class Topic (val classname : String,
       xmlns:owl="http://www.w3.org/2002/07/owl#"
       xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
       xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
-      <rdfs:label>{classname}</rdfs:label>
-        {subclass_toOWL()}
+        <rdfs:label>{classname}</rdfs:label>
         {Construct.toDeprecated(deprecated)}
-      </owl:Class>
+        {subclass_toOWL()}
+        </owl:Class>
     )
   }
   def toXTM_type : Elem = {
