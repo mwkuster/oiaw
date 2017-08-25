@@ -1,255 +1,36 @@
-h2. Resource 
+h2. Work
 
-||Class name||Short description || ID || Alternate IDs || Subclass of||
-||Resource || Anything having a URI || resource || ||
-
-||''Property name  || Short description || ID || Alternate ID || Typical value domains ''||
-||URI / IRI || Address for electronic access to the resource (e.g. via Web, Email etc.)|| link || - || {{{xsd:anyURI}}} ||
-||Name ||Title(s)/name(s) of the resource, possibly scoped by language || name ||   ||  ||
-||Description ||Free text description(s) of the resource (scoped by language if necessary) || description ||http://purl.org/dc/elements/1.1/description || ||
-||Language ||Language of the resource || language || http://purl.org/dc/terms/language  || {{{xsd:language}}}||
-||Status ||Categorization of the status according to a suitable taxonomy || status ||  || values such as ''valid'', ''withdrawn'', ''operational''||
-||Creation date ||Date of the resource's creation || creation-date ||  || {{{xsd:dateTime}}} ||
-||Update date ||Date of last update to the resource || update-date || || {{xsd:dateTime}}} ||
-||Valid from-to date ||Timespan for which this resource is valid || valid-from-to-date || || conformant to http://purl.org/dc/terms/PeriodOfTime ||
-||Audience ||Agents  for whom the resource is intended or useful. ||  audience || http://purl.org/dc/terms/audience || one of ''citizen'', ''business'' and ''administration''||
-||Access Rights ||Free text description of access rights to the resource ||  access-rights || http://purl.org/dc/terms/accessRights || {{{xsd:string}}}||
-
-
-Relationships:
-
-||''Name || Short description || Type-ID || Player type 1 || Role type 1  || Player type 2 || Role type 2 ''||
-||is-about ||The resource is about a given subject || is-about || resource || is-about/resource || subject || is-about/subject ||
-||is-provided-by || Creator of the resource (human or institutional agent(s)) || is-provided-by || resource || is-provided-by/resource || institution || is-provided-by/institution ||
-||is-governed-by ||a resource is governed by a given regulation (playing the role of a mandate) || is-governed-by || resource || is-governed-by/resource ||  regulation || is-governed-by/mandate ||
-||is-related-to ||another resource that this resource is related to || is-related-to || resource || is-related-to/resource ||  resource || is-related-to/resource ||
-||is-part-of ||This resource is a part of a resource bundle || is-part-of || resource || is-part-of/resource || resource-bundle || is-part-of/resource-bundle ||
-||is-relevant-for ||Resource is relevant a given administrative unit or area || is-relevant-for || resource || is-relevant-for/resource ||  administrative-unit || is-relevant-for/administrative-unit ||
-
-
-== Resource: Service ==
-'''NOTE:''' Related to the Dublin Core service concept http://purl.org/dc/dcmitype/Service
-
-||''Classname||ID || Subclass of''||
-||Service || service || resource ||
-
-A capability (in the sense of the SOA reference model) offered by a public authority or on behalf of a public authority for citizens, other public authorities, or other types of organizations such as businesses or NGOs. This can be an electronic service or a “traditional” office service.
-
-Properties (in addition to the generic ones):
-||''Property name  || Short description || ID || Alternate ID || Typical value domains''||
-||Operating Hours ||Time span in which this service is operational (e.g. opening hours) || operating-hours || || list of {{{xsd:time}}} value pairs (i.e. from-to pairs, e.g. morning and afternoon opening hours) ||
-||Interface Definition ||URI of a machine-processable interface specification for the service (e.g. expressed in WSDL, IDL, or WADL) || interface-definition || || {{{xsd:anyURI}}} ||
-
-
-Relationships (in addition to the generic ones):
-||''Name || Short description || Type-ID || Player type 1 || Role type 1  || Player type 2 || Role type 2 ''||
-||supports ||Supports or implements a given process || supports ||  service || supports/service || process || supports/process ||
-
-
-== Resource: Process ==
-||''Classname||ID || Subclass of''||
-||Process || process || resource ||
-
-Formalized description of a process, preferably in BPMN, normally chaining a number of services. A process normally either produces a new resource (e.g. a document) or changes an internal state (e.g. approval of an application).
-
-Property (in addition to the generic ones):
-||''Property name  || Short description || ID || Alternate ID || Typical value domains ''||
-||Process description||Pointer to a formal description of the process, best in a standardized notation such as BPMN|| process|| || {{{xsd:anyURI}}}||
-
-Relationships (in addition to the generic ones):
-||''Name || Short description || Type-ID || Player type 1 || Role type 1  || Player type 2 || Role type 2 ''||
-||is-intended-for||	Function that this process is intended to support||is-intended-for|| process||is-intended-for/process||function|| is-intended-for/function||
-
-== Resource: Standard ==
-
-||''Classname||ID || Subclass of''||
-||Standard  || standard || resource ||
-
-Alternative ID: http://purl.org/dc/terms/Standard
-
-A Standard is for the purposes of the ontology a formal or informal specification (a "basis for comparison; a reference point against which other things can be evaluated" in DC terminology) that is referenced in an eGovernment mandate or implemented in an eGovernment service. Standards are further subdivided into technical, semantic and process standards.
-
-Properties (in addition to the generic ones):
-||''Property name  || Short description || ID || Alternate ID || Typical value domains ''||
-||Formal identification ||Formal identification of a standard || formal-identification || - || - ||
-||Version ||Version of the standard || version || || ||
-
-
-Relationships (in addition to the generic ones):
-||''Name || Short description || Type-ID || Player type 1 || Role type 1  || Player type 2||  Role type 2 ''||
-||is-superseded-by ||Standard is superseded by another standard || is-superseded-by || standard || is-superseded-by/superseded-standard || standard || is-superseded-by/superseding-standard ||
-||is-approved-by ||Standard is approved, recommended or mandated by a mandate || is-approved-by || standard || is-approved-by/standard || regulation || is-approved-by/mandate ||
-||is-under-observation-by ||Standard is under observation by a mandate || is-observation-by || standard || is-observation-by/standard || regulation || is-observation-by/mandate ||
-||is-discouraged-by ||Standard is under discouraged by a mandate || is-discouraged-by || standard || is-discouraged-by/standard || regulation || is-discouraged-by/mandate ||
-
-'''NOTE:''' The criteria for the evaluation of standards that were developped in the CEN/ISSS eGovernment Focus Group are ''not'' part of this generic ontology
-
-== Resource: Document ==
-
-A textual document that can be in electronic or paper form. Requirements document are a specific type of document.
-
-The category property of a document resource will define the type of the document allowing users to assign the document to a specific category of a given taxonomy. The property will use the Part 2 results for this (Terminological Resource Network). As such, the category property will contain a URI to an entry of the TRN such as[[BR]]
- `"http://www.cen.eu/egovshare/trn.owl#Term4234"`.[[BR]]
-The term itself can then be linked to an existing taxonomy such as e.g. an [http://www.eclass-online.com/ eCl@ss]  element. For more details, please refer to the part 2 specification of this CWA.
-
-
-||''Classname||ID || Subclass of''||
-||Document || document || resource ||
-
-||''Property name  || Short description || ID || Alternate ID || Typical value domains ''||
-||Category || Type of document (e.g. requirements document, tutorial etc.) || category ||   ||   ||
-
-== Resource: Information system ==
-An information system is &ldquo;a system of persons, data records and activities that process the data and information in an organization, and it includes the organization's manual and automated processes&rdquo; ([http://en.wikipedia.org/wiki/Information_system Wikipedia s.v. "Information system", consulted on 2008-10-07])
-
-'''NOTE:''' Information systems are often based on computer programs in the sense of    http://purl.org/dc/dcmitype/Software, but are not necessarily themselves computer programs
-
-||''Classname||ID || Subclass of''||
-||Information system||information-system|| resource ||
-
-
-Relationships (in addition to the generic ones):
-||''Name || Short description || Type-ID || Player type 1 || Role type 1  || Player type 2 || Role type 2 ''||
-||supports ||Supports or implements by a given service || supports ||  information-system|| supports/information-system|| service || supports/service ||
-||implements ||Implements by given standard ||  implements || information-system|| implements/information-system|| standard || implements/standard ||
-
-== Resource: Resource Bundle ==
-For practical purposes resources are often bundled into larger units – archives or libraries for, e.g., process descriptions and circumstances (''Lebenslagen'') for services.
-
-
-||''Classname||ID || Subclass of''||
-||Resource bundle || resource-bundle || resource ||
-
-Alternate ID: http://purl.org/dc/dcmitype/Collection
+|| Class name || Short description || ID || Alternate ID || Subclass of ||
+| Work | "A distinct intellectual creation" (Definition) / "an abstract notion of an artistic or intellectual creation" (FRBR) | work | http://purl.org/vocab/frbr/core#Work | |
 
 Properties:
-
-Same as for resources (resource bundles are really composite resources)
-
-Relationships:
-
-Same as for resources
-
-== Resource: Regulation ==
-
-&ldquo;A rule or directive made and maintained by an authority&rdquo; (Oxford American Dictionaries). Regulations in this sense can be, amongst others, laws, directives and European regulations
-
-||''Classname||ID || Subclass of''||
-||Regulation || regulation || resource ||
-
-
-'''NOTE:''' A regulation often has the role of a mandate (&rdquo;an official order or commission to do something&rdquo;, OAD) in associations 
-
-
-== Agent ==
-Abstract class for active movents in the eGovernment domain
-
-||''Classname||ID || Subclass of''||
-||Agent || agent || ||
-
-Alternative ID: http://purl.org/dc/terms/Agent
-
-||''Property name || Short description || ID || Alternate ID || Typical value domains ''||
-||Name ||Name of the person || name || || ||
-||Addresses ||Physical address(es) of the institution ||  address ||  || free text (applications may choose a more detailed structure) ||
-||Contact details ||Other types of contact details for the institution (email, phone, fax, etc.) ||  contact-details || || free text (applications may choose a more detailed structure) ||
-||URI/IRI ||URI(s)/IRI(s) related to the institution (webpage, central email address etc.) ||  link ||  ||  {{{xsd:anyURI}}} ||
-||Description ||Free text description(s) of the institution (scoped by language if applicable) ||  description ||  http://purl.org/dc/elements/1.1/description  || ||
-||Operating Hours ||Time span in which this institution is accessible for customers (physically, via phone, or other means of personal contact) ||  operating-hours || || list of {{{xsd:time}}} value pairs (i.e. from-to pairs, e.g. morning and afternoon opening hours) ||
-
-== Agent: Institution ==
-
-A permanent organizational unit active in the eGovernment domain
-
-||''Classname||ID || Subclass of''||
-||Institution ||institution || agent ||
-
-Property in addition to those of class Agent:
-
-||''Property name || Short description || ID || Alternate ID || Typical value domains ''||
-||Category ||Category of the institution according to a taxonomy||  category || || cf. below ||
-
-
-Very important types of eGovernment institutions are public authorities.
-
-Possible taxonomies for the categorization of institutions are:
-
- * for European Union matters: [http://europa.eu/eurovoc/PDF/dom_10_EN.pdf Eurovoc, Field 10]
- * for international organizations: [http://europa.eu/eurovoc/PDF/dom_76_EN.pdf Eurovoc, Field 76]
- * for local authorities: '''to be determined'''. National catalogues include the [http://www.esd.org.uk/standards/ipsv/2.00/viewer/ IPSV] and the [http://www.esd.org.uk/standards/lgcl/ LGCL], both for the UK
- * for economics: [http://europa.eu/eurovoc/PDF/dom_16_EN.pdf Eurovoc, Field 16]
-
-
-Relationship:
-||''Name || Short description || Type-ID || Player type 1 ||  Role type 1  || Player type 2 || Role type 2 ''||
-||is-part-of ||Institution is part of another institution (e.g. a department) || is-part-of ||  institution || is-part-of/part ||  institution || is-part-of/whole||
-||is-acting-on-behalf ||Institution is acting on behalf of another institution || is-acting-on-behalf-of || institution || is-acting-on-behalf-of/acting-institution ||   institution || is-acting-on-behalf-of/represented-institution ||
-||is-related-to ||Institution is related to another institution other than by being part of it or by acting on its behalf || is-related-to ||  institution || is-related-to/institution ||  institution || is-related-to/institution ||
-||is-located-in ||Institution is situated in and has authority for an administrative unit || is-located-in || institution || is-located-in/institution ||  administrative-unit || is-located-in/administrative-unit ||
-
-== Agent: Person ==
-Class that represents people (= foaf:Person)
-
-||''Classname||ID || Subclass of''||
-||Person || person || agent ||
-
-Properties in addition to those of class Agent:
-||''Property name || Short description || ID || Alternate ID || Typical value domains ''||
-||Title ||Title(s) of the person || title || http://xmlns.com/foaf/0.1/title || ||
-||Gender ||Gender of the person || gender || http://xmlns.com/foaf/0.1/gender || choice of ''male'', ''female'' or ''other'' ||
+|| Property name || Short description || ID || Alternate ID || Typical value domains || Cardinality || Procat field || Comments ||
+| Identifier of document | An alternative identifier (id) that this work may have | id_document | | xsd:string | 0..* | | All identifier-like properties are subproperties of the identifier property |
+| Work identifier | A domain specific way to formally identify this resource | id | | xsd:string | 0..* | | DEPRECATED |
+| Work title | A title for the work itself (domain specific) | title | | rdfs:Literal | 0..* | | Multiple usage to gather all language versions if necessary, Marc field 249 a |
+| Date of document | The date of document (possibly including annotation properties) | date_document | | xsd:date | 1 | DD, PD and others |DD_COMMENT is mixed content, decoded with fd_365 |
 
 Relationships:
-||''Name || Short description || Type-ID || Player type 1 || Role type 1  || Player type 2|| Role type 2 ''||
-||is-working-for ||Person is working for an institution ||  is-working-for || person || is-working-for/person || institution || is-working-for/institution ||
-||is-responsible-for ||Person is responsible for the maintenance, the operation of a resource or access to the resource || is-responsible-for || person || is-responsible-for/person || resource || is-responsible-for/resource ||
+|| Name || Short description || Type-ID || Player type 1 || Role type 1 || Player type 2 || Role type 2 || Characteristics || Cardinality || Procat field || Comments ||
+| Work cites work | The work cites another work (CI and others) | cites | work | | work | | inverseOf: cited_by | 0..* | CI, CJ for case law, etc. | |
+| Work cited by work | The work is cited by another work | cited_by | work | | work | | inverseOf: cites | 0..* | | |
+| Work is part of work | The work is part of another work (e.g. an article in a volume of proceedings or a split COM that is part of a multipart COM) | part_of | work | | work | | inverseOf: contains | 0..* | LNK_COM, LNK_JO | In theory also LNK_CES, LNK_CDR, but those have 0% of usage. |
+| Work contains work | The work contains another work (e.g. a law contains many articles or a COM or CES document contains a number of split proposals) | contains | work | | work | | inverseOf: part_of | 0..* | | |
+# ------- START subdivision object properties ------------------------------------------------------------------------------------------------
+| Work contains subdivision | The subdivision of this work  | contains | work | | subdivision | | inverseOf: part_of  | 0..*| | | |
+| Work contains alinea | The alinea of this work  | contains | work | | alinea | | inverseOf: part_of  | 0..*| | | |
+# ------- END subdivision object properties ------------------------------------------------------------------------------------------------
+| Work is created by agent | The work is created by an agent (AU) | created_by | work | | agent | | inverseOf: creates | 1..* | AU | |
 
 
-== Administrative Unit ==
-Politically defined administrative unit such as a town, a region, a country or the European Union
-
-||''Classname||ID || Subclass of''||
-||Administrative unit || administrative-unit || ||
-
-Property:
-||''Property name || Short description || ID || Alternate ID || Typical value domains ''||
-||Name ||Official name(s) of the administrative unit, possibly scoped by language || official-name || || cf. below ||
-||Category ||Category of the administrative unit according to a suitable taxonomy || category || || cf. below ||
-
-Following the lead of CWA 15526:2006 ''European Network for Administrative Nomenclature''  administrative units are named and categorized using the codes of the [http://ec.europa.eu/eurostat/ramon/nuts/basicnuts_regions_en.html NUTS nomenclature]. In particular, local administrative units use the  [http://ec.europa.eu/eurostat/ramon/nuts/lau_en.html LAU taxonomy]
-
-Relationship:
-||''Name || Short description || Type-ID || Player type 1 || Role type 1  || Player type 2 || Role type 2 ''||
-||is-part-of ||The administrative unit is part of another administrative unit || is-part-of || administrative-unit || is-part-of/whole ||  administrative-unit || is-part-of/part ||
-
-== Subject ==
-Subject described as a term in a suitable taxonomy such as Eurovoc
-
-||''Classname||ID || Subclass of''||
-||Subject || subject || ||
-
-Property:
-||''Property name || Short description || ID || Alternate ID || Typical value domains ''||
-||Term ||Term naming the subject, possibly scoped by language || term || || Eurovoc codes (where possible). Necessary extensions should be documented and linked to appropriate Eurovoc subject(s) ||
-||Description ||Free-text description(s) explaining the term, possibly scoped by language || description ||  http://purl.org/dc/elements/1.1/description  || ||
+h2. Work: Subclasses for complex works
+|| Class name || Short description || ID || Alternate ID || Subclass of ||
+| Complex Work | This class comprises works that have more than one work as members (FRBRoo) | complex_work | | work |
 
 Relationships:
-||''Name || Short description || Type-ID || Player type 1 || Role type 1  || Player type 2 || Role type 2 ''||
-||is-narrower-than ||this subject is narrower than another subject || is-narrower-than|| subject || is-narrower-than/broader-subject || subject || is-narrower-than/narrower-subject ||
+|| Name || Short description || Type-ID || Player type 1 || Role type 1 || Player type 2 || Role type 2 || Characteristics || Cardinality || Procat field || Comments ||
+| Work has member | This property associates an instance of complex_work with an instance of work that forms part of it. | has_member | complex_work | | work| | inverseOf: is_member_of  | 0..* |  | Non transitive and Non reflexive|
 
-                   '''Note:''' A subject can be linked to a number of other concepts through the {{{is-narrower-then}}} relationship
-
-== Function ==
-Function or activity in or of eGovernment activities. A function is described as a term in a suitable taxonomy analogous to the [http://www.e.govt.nz/standards/nzgls Functions of New Zealand (FONZ) thesaurus of NZGLS].
-
-||''Classname||ID || Subclass of''||
-||Function || function || ||
-
-
-Property:
-||''Property name || Short description || ID || Alternate ID || Typical value domains ''||
-||Term ||Term naming the function, possibly scoped by language || term || || Eurovoc codes (where possible). Necessary extensions should be documented and linked to appropriate Eurovoc subject(s) ||
-||Descriptio n ||Free-text description(s) explaining the term, possibly scoped by language || description ||  http://purl.org/dc/elements/1.1/description  || ||
-
-Relationships:
-||''Name || Short description || Type-ID || Player type 1 || Role type 1  || Player type 2 || Role type 2 ''||
-||is-related-to ||this function is related to another function || is-related-to || function || is-related-to/function || function || is-related-to/function ||
+h2. Serial work
+|| Class name || Short description || ID || Alternate ID || Subclass of ||
+| Serial Work | This class comprises works that are, or have been, planned to result in sequences of manifestations with common features. (Definition FRBRoo) | serial_work |  | complex_work|

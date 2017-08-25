@@ -56,7 +56,7 @@ ant dist
 
 Ensure that the environment variable SCALA\_HOME is set and points to the directory with the scala standard libraries. For a scala installed via port under Mac OS X this would for example be:
 ```
-export SCALA_HOME=/opt/local/share/scala-2.7
+export SCALA_HOME=/opt/local/share/scala-2.12
 ```
 
-If you which you can move the executing shell script and the jars (oiaw.jar and the jars in lib) to some other directory and put it in the path. Just ensure that the respective structures remain unchanged
+If you wish you can move the executing shell script and the jars (oiaw.jar and the jars in lib) to some other directory and put it in the path. Just ensure that the respective structures remain unchanged
