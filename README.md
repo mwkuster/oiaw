@@ -16,7 +16,7 @@ Of course, you can also do the same starting directly from the raw version Wiki 
   -b "http://www.budabe.eu/oiaw/test#" -o /tmp/oiaw3.xml 
 ```
 
-OiaW has been tested mainly against the popular MoinMoin wiki, but as in oiaw.template you can freely configure the markup to be evaluated it should work equally well with other line-oriented Wiki markup systems.
+You can freely configure the markup to be evaluated it should work equally well with other line-oriented Wiki markup systems.
 
 Usage:
 
@@ -39,8 +39,8 @@ Command line parameters:
 # Building OiaW #
 
   * Check out the OiaW sources in to a directory of your choice
-  * Ensure that you have Scala >= 2.7 installed
-  * Copy build.xml\_template to build.xml and adapt the path to the scala standard libraries
+  * Ensure that you have Scala >= 2.12 installed
+  * If necessary adapt the path to the scala standard libraries in build.xml
 
 Then execute in the directory into which you have checked out OiaW
 ```
