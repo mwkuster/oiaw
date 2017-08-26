@@ -1,5 +1,0 @@
-# pack-refs with: peeled fully-peeled 
-6cdac5378ef823232a5f7a8ccf4768f3ed4de876 refs/remotes/origin/master
-80288718c86dd5520d457794cc304aa8f03bd9c1 refs/remotes/origin/op_specific_adaptations
-793499f529aff7ceedd17cafe33cf58e8739f7d0 refs/remotes/origin/wiki
-01059df5a0d89ef5dfbdac662d244949d6f4e538 refs/tags/release-1.0-scala2.7

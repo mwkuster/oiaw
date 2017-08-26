@@ -8,19 +8,19 @@ Properties:
 | Identifier of document | An alternative identifier (id) that this work may have | id_document | | xsd:string | 0..* | | All identifier-like properties are subproperties of the identifier property |
 | Work identifier | A domain specific way to formally identify this resource | id | | xsd:string | 0..* | | DEPRECATED |
 | Work title | A title for the work itself (domain specific) | title | | rdfs:Literal | 0..* | | Multiple usage to gather all language versions if necessary, Marc field 249 a |
-| Date of document | The date of document (possibly including annotation properties) | date_document | | xsd:date | 1 | DD, PD and others |DD_COMMENT is mixed content, decoded with fd_365 |
+| Date of document | The date of document (possibly including annotation properties) | date_document | | xsd:date | 1 |  | |
 
 Relationships:
 || Name || Short description || Type-ID || Player type 1 || Role type 1 || Player type 2 || Role type 2 || Characteristics || Cardinality || Procat field || Comments ||
-| Work cites work | The work cites another work (CI and others) | cites | work | | work | | inverseOf: cited_by | 0..* | CI, CJ for case law, etc. | |
+| Work cites work | The work cites another work  | cites | work | | work | | inverseOf: cited_by | 0..* |  | |
 | Work cited by work | The work is cited by another work | cited_by | work | | work | | inverseOf: cites | 0..* | | |
-| Work is part of work | The work is part of another work (e.g. an article in a volume of proceedings or a split COM that is part of a multipart COM) | part_of | work | | work | | inverseOf: contains | 0..* | LNK_COM, LNK_JO | In theory also LNK_CES, LNK_CDR, but those have 0% of usage. |
-| Work contains work | The work contains another work (e.g. a law contains many articles or a COM or CES document contains a number of split proposals) | contains | work | | work | | inverseOf: part_of | 0..* | | |
-# ------- START subdivision object properties ------------------------------------------------------------------------------------------------
+| Work is part of work | The work is part of another work  | part_of | work | | work | | inverseOf: contains | 0..* |  |  |
+| Work contains work | The work contains another work  | contains | work | | work | | inverseOf: part_of | 0..* | | |
+# ------- START Test comments ------------------------------------------------------------------------------------------------
 | Work contains subdivision | The subdivision of this work  | contains | work | | subdivision | | inverseOf: part_of  | 0..*| | | |
 | Work contains alinea | The alinea of this work  | contains | work | | alinea | | inverseOf: part_of  | 0..*| | | |
-# ------- END subdivision object properties ------------------------------------------------------------------------------------------------
-| Work is created by agent | The work is created by an agent (AU) | created_by | work | | agent | | inverseOf: creates | 1..* | AU | |
+# ------- END  ------------------------------------------------------------------------------------------------
+| Work is created by agent | The work is created by an agent (AU) | created_by | work | | agent | | inverseOf: creates | 1..* |  | |
 
 
 h2. Work: Subclasses for complex works
@@ -29,7 +29,7 @@ h2. Work: Subclasses for complex works
 
 Relationships:
 || Name || Short description || Type-ID || Player type 1 || Role type 1 || Player type 2 || Role type 2 || Characteristics || Cardinality || Procat field || Comments ||
-| Work has member | This property associates an instance of complex_work with an instance of work that forms part of it. | has_member | complex_work | | work| | inverseOf: is_member_of  | 0..* |  | Non transitive and Non reflexive|
+| Work has member | This property associates an instance of complex_work with an instance of work that forms part of it. | has_member | complex_work | | work| | inverseOf: is_member_of  | 0..* |  | |
 
 h2. Serial work
 || Class name || Short description || ID || Alternate ID || Subclass of ||
